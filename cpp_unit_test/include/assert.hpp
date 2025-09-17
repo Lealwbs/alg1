@@ -7,7 +7,7 @@
 class CPP_UNIT_ASSERT {
     private: 
         int total_tests;
-        int success_tests;
+        int failed_tests;
 
         std::string log_messages;
     
