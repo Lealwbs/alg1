@@ -26,7 +26,7 @@ void CPP_UNIT_ASSERT::assert_equals(const std::string act, const std::string exp
     if(act != exp){
         failed_tests++;
         log_messages += 
-            "\n\n" + std::to_string(total_tests) + " failed test |#| ASSERT_EQUALS\n"
+            "\n\nTest number " + std::to_string(total_tests) + " |#| ASSERT_EQUALS\n"
             "EXP: " + exp + " \nACT: " + act;
     }
 };
