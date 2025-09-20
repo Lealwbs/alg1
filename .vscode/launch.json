@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/Code/alg1",
-      "program": "d:/Code/alg1/build/Debug/outDebug",
+      "cwd": "d:/Code/alg1/data_structures/list",
+      "program": "d:/Code/alg1/data_structures/list/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
