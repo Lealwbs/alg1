@@ -3,66 +3,65 @@
 Este repositório organiza os **TADs** em pastas separadas (`list/`, `queue/`, `stack/`, `avl_tree/`, etc.), e cada um possui seus próprios arquivos `.cpp` e `.hpp`. Os **testes unitários** ficam na pasta `tests/`, seguindo o padrão:
 
 ```
-data_structures/
-├── list/
-│   ├── list.cpp 
-│   └── list.hpp
-├── queue/
-│   ├── queue.cpp
-│   └── queue.hpp
-├── stack/
-│   ├── stack.cpp
-│   └── stack.hpp
-├── avl_tree/
-│   ├── avl_tree.cpp
-│   └── avl_tree.hpp
-├── dsu/
-│   ├── dsu.cpp
-│   └── dsu.hpp
-├── graph/
-│   ├── graph.cpp
-│   └── graph.hpp
-├── hash_table/
-│   ├── hash_table.cpp
-│   └── hash_table.hpp
-├── min_heap/
-│   ├── min_heap.cpp
-│   └── min_heap.hpp
-├── tests/
-│   ├── Makefile
-│   ├── list_test.cpp
-│   ├── queue_test.cpp
-│   ├── stack_test.cpp
-│   ├── avl_tree_test.cpp
-│   ├── dsu_test.cpp
-│   ├── graph_test.cpp
-│   ├── hash_table_test.cpp
-│   ├── min_heap_test.cpp
-│   ├── bin/          # Binários compilados (criado automaticamente)
-│   └── obj/          # Arquivos objeto (criado automaticamente)
+Code/alg1/
+├── cpp_unit_test/
+│   ├── include/
+│   │   └── assert.hpp
+│   └── src/
+│       └── assert.cpp
+└── data_structures/
+    ├── list/
+    │   ├── list.cpp 
+    │   └── list.hpp
+    ├── queue/
+    │   ├── queue.cpp
+    │   └── queue.hpp
+    ├── stack/
+    │   ├── stack.cpp
+    │   └── stack.hpp
+    ├── avl_tree/
+    │   ├── avl_tree.cpp
+    │   └── avl_tree.hpp
+    ├── dsu/
+    │   ├── dsu.cpp
+    │   └── dsu.hpp
+    ├── graph/
+    │   ├── graph.cpp
+    │   └── graph.hpp
+    ├── hash_table/
+    │   ├── hash_table.cpp
+    │   └── hash_table.hpp
+    ├── min_heap/
+    │   ├── min_heap.cpp
+    │   └── min_heap.hpp
+    └── tests/
+        ├── Makefile
+        ├── list_test.cpp
+        ├── queue_test.cpp
+        ├── bin/              # Binários compilados (.exe)
+        └── obj/              # Arquivos objeto (.o)
 ```
 
-O `Makefile` foi configurado para:
-- **Compilar todos os testes automaticamente** (sem precisar editar o arquivo quando novos forem adicionados)
-- **Detectar automaticamente** novos arquivos `*_test.cpp`
-- **Rodar todos os testes** de uma vez ou os testes de um TAD específico
-- **Organizar os binários** em `tests/bin/` e os objetos em `tests/obj/`
-- **Compilação incremental** (só recompila o que foi modificado)
+O `Makefile` foi configurado especificamente para **Windows** com:
+- **Compilação manual** e explícita de cada teste
+- **Integração** com a biblioteca de testes `cpp_unit_test`
+- **Organização** dos binários em `tests/bin/` e objetos em `tests/obj/`
+- **Comandos simples** e extensíveis
 
 <br>
 
-## 📋 Estruturas de Dados Disponíveis
+## 📋 Estruturas de Dados e Testes
 
 | Estrutura | Arquivo de Teste | Status |
 |-----------|------------------|--------|
-| 📝 **Lista** | `list_test.cpp` | ✅ |
-| 🔄 **Fila (Queue)** | `queue_test.cpp` | ✅ |
-| 📚 **Pilha (Stack)** | `stack_test.cpp` | ✅ |
-| 🌳 **Árvore AVL** | `avl_tree_test.cpp` | ✅ |
-| 🔗 **DSU (Disjoint Set Union)** | `dsu_test.cpp` | ✅ |
-| 🕸️ **Grafo** | `graph_test.cpp` | ✅ |
-| #️⃣ **Tabela Hash** | `hash_table_test.cpp` | ✅ |
-| ⬆️ **Min Heap** | `min_heap_test.cpp` | ✅ |
+| 📝 **Lista** | `list_test.cpp` | ✅ Disponível |
+| 🔄 **Fila (Queue)** | `queue_test.cpp` | ✅ Disponível |
+| 📚 **Pilha (Stack)** | `stack_test.cpp` | 🔄 Para adicionar |
+| 🌳 **Árvore AVL** | `avl_tree_test.cpp` | 🔄 Para adicionar |
+| 🔗 **DSU (Disjoint Set Union)** | `dsu_test.cpp` | 🔄 Para adicionar |
+| 🕸️ **Grafo** | `graph_test.cpp` | 🔄 Para adicionar |
+| #️⃣ **Tabela Hash** | `hash_table_test.cpp` | 🔄 Para adicionar |
+| ⬆️ **Min Heap** | `min_heap_test.cpp` | 🔄 Para adicionar |
 
 <br>
 
@@ -70,103 +69,139 @@ O `Makefile` foi configurado para:
 
 ### 🏃‍♂️ Executar Testes
 
-#### Rodar todos os testes
+#### Testes disponíveis
 ```bash
-make test_all
-```
-
-#### Rodar testes específicos
-```bash
-make test_list        # Testa Lista
-make test_queue       # Testa Fila
-make test_stack       # Testa Pilha
-make test_avl_tree    # Testa Árvore AVL
-make test_dsu         # Testa DSU
-make test_graph       # Testa Grafo
-make test_hash_table  # Testa Tabela Hash
-make test_min_heap    # Testa Min Heap
+mingw32-make test_list    # Testa Lista
+mingw32-make test_queue   # Testa Fila
 ```
 
 ### 🔧 Utilitários
 
-#### Compilar sem executar
+#### Compilar todos os testes
 ```bash
-make compile
+mingw32-make compile
 ```
 
 #### Limpar arquivos compilados
 ```bash
-make clean
+mingw32-make clean
 ```
 
-#### Ver ajuda
+#### Ver comandos disponíveis
 ```bash
-make help
+mingw32-make help
 ```
 
 <br>
 
 ## 🚀 Como Usar
 
-1. **Clone o repositório** e navegue até a pasta de testes:
+1. **Navegue até a pasta de testes**:
    ```bash
    cd data_structures/tests
    ```
 
-2. **Execute todos os testes**:
+2. **Execute um teste específico**:
    ```bash
-   make test_all
+   mingw32-make test_list
    ```
 
-3. **Ou execute um teste específico**:
+3. **Compile todos os testes sem executar**:
    ```bash
-   make test_stack
+   mingw32-make compile
+   ```
+
+4. **Limpe os arquivos compilados**:
+   ```bash
+   mingw32-make clean
    ```
 
 <br>
 
 ## ➕ Adicionando Novos Testes
 
-Para adicionar uma nova estrutura de dados:
+Para adicionar uma nova estrutura de dados (exemplo: **stack**):
 
-1. **Crie a pasta da estrutura**:
-   ```bash
-   mkdir data_structures/nova_estrutura
-   ```
+### 1. **Crie o arquivo de teste**:
+```cpp
+// stack_test.cpp
+#include "assert.hpp"
+#include "stack.hpp"
 
-2. **Adicione os arquivos** `.cpp` e `.hpp` na pasta
+int main(){
+    CPP_UNIT_ASSERT t = CPP_UNIT_ASSERT();
+    
+    // Seus testes aqui
+    t.assert_equals("esperado", "atual");
+    
+    return 0;
+}
+```
 
-3. **Crie o arquivo de teste**:
-   ```bash
-   touch data_structures/tests/nova_estrutura_test.cpp
-   ```
+### 2. **Edite o Makefile**:
 
-4. **Compile e teste**:
-   ```bash
-   make test_nova_estrutura
-   ```
+**No target `compile:`**
+```makefile
+compile: $(BIN_DIR)/list_test.exe $(BIN_DIR)/queue_test.exe $(BIN_DIR)/stack_test.exe
+```
 
-O Makefile **detectará automaticamente** o novo teste! 🎉
+**Adicione as regras:**
+```makefile
+# Compilar teste da pilha
+$(BIN_DIR)/stack_test.exe: stack_test.cpp $(OBJ_DIR)/stack.o $(OBJ_DIR)/assert.o
+    @if not exist "$(BIN_DIR)" mkdir "$(BIN_DIR)"
+    $(CXX) $(CXXFLAGS) -I$(SRC_DIR) -I$(CPP_UNIT_DIR)/include stack_test.cpp $(OBJ_DIR)/stack.o $(OBJ_DIR)/assert.o -o $(BIN_DIR)/stack_test.exe
+
+# Compilar objeto da pilha
+$(OBJ_DIR)/stack.o: $(SRC_DIR)/stack/stack.cpp
+    @if not exist "$(OBJ_DIR)" mkdir "$(OBJ_DIR)"
+    $(CXX) $(CXXFLAGS) -I$(SRC_DIR) -I$(CPP_UNIT_DIR)/include -c $(SRC_DIR)/stack/stack.cpp -o $(OBJ_DIR)/stack.o
+
+# Executar teste da pilha
+test_stack: $(BIN_DIR)/stack_test.exe
+    @echo Executando teste da pilha...
+    @$(BIN_DIR)/stack_test.exe
+```
+
+### 3. **Teste o novo comando**:
+```bash
+mingw32-make test_stack
+```
 
 <br>
 
 ## 🛠️ Configurações Técnicas
 
-- **Compilador**: `g++`
+- **Compilador**: `g++` (MinGW no Windows)
 - **Padrão**: C++17
 - **Flags**: `-Wall -Wextra -g` (warnings e debug)
-- **Detecção automática** de arquivos `*_test.cpp`
-- **Compilação incremental** para melhor performance
-- **Organização automática** de binários e objetos
+- **Framework de Testes**: `cpp_unit_test` customizado
+- **Inclusões**:
+  - `data_structures/` para as estruturas
+  - `cpp_unit_test/include/` para os asserts
 
 <br>
 
 ## 📖 Estrutura do Makefile
 
-O Makefile utiliza wildcards e pattern matching para:
-- Detectar automaticamente todos os `*_test.cpp`
-- Encontrar e compilar todas as estruturas em `../*/`
-- Criar targets dinâmicos para cada teste
-- Gerenciar dependências automaticamente
+O Makefile é **simples e manual** para facilitar:
+- **Controle total** sobre cada compilação
+- **Fácil extensão** copiando e adaptando seções
+- **Compatibilidade total** com Windows/MinGW
+- **Integração** com a biblioteca de testes personalizada
 
-Isso significa que você pode adicionar quantas estruturas quiser sem precisar modificar o Makefile! 🔄
+### Exemplo de uso da biblioteca de testes:
+```cpp
+#include "assert.hpp"
+#include "list.hpp"
+
+int main(){
+    CPP_UNIT_ASSERT t = CPP_UNIT_ASSERT();
+    
+    // Testes
+    t.assert_equals(expected, actual);
+    t.assert_true(condition);
+    
+    return 0;
+}
+```
