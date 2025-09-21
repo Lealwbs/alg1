@@ -38,6 +38,7 @@ $(OBJ_DIR)/assert.o: $(CPP_UNIT_DIR)/src/assert.cpp
 
 # Executar teste da lista
 test_list: $(BIN_DIR)/list_test.exe
+	cls
 	@echo Executando teste da lista...
 	@$(BIN_DIR)/list_test.exe
 
