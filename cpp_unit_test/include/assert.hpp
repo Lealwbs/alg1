@@ -26,7 +26,9 @@ class CPP_UNIT_ASSERT {
         CPP_UNIT_ASSERT();
         ~CPP_UNIT_ASSERT();
         
-        void assert_equals(const std::string act, const std::string exp);
+        void assert_equals(const std::string& act, const std::string& exp);
+        void assert_equals(int act, int exp);
+        void assert_equals(bool act, bool exp);
 };
 
 #endif
