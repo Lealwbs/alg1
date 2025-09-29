@@ -1,10 +1,10 @@
 class Graph:
-    def __init__(self, vertex_count: int): 
+    def __init__(self, vertex_count: int) -> None: 
         self.vertex_count: int = vertex_count 
         self.edges: list[tuple[int, int, int]] = []
         self.graph: dict[int, list[tuple[int, int, int]]] = { i: [] for i in range(1, vertex_count + 1) }
 
-    def __str__(self):
+    def __str__(self) -> str:
         # Escrever uma forma melhor de representar o grafo:
         result = f"Grafo({self.vertex_count} vertices e {len(self.edges)} arestas):\n"
         for from_vertex, to_vertex, length in self.edges:
@@ -13,17 +13,36 @@ class Graph:
         
 
     # Por o grafo ser bidirecionado, a função add_edge já adiciona as duas direções
-    def add_edge(self, from_vertex: int, to_vertex: int, length: int):
+    def add_edge(self, from_vertex: int, to_vertex: int, length: int) -> None:
         self.edges.append((from_vertex, to_vertex, length))
         self.graph[from_vertex].append((to_vertex, length))
         self.graph[to_vertex].append((from_vertex, length))
 
-    def dijkstra(self, start: int, end: int) -> list[int]:
+
+    ''' # Parte 1
+    Praça central continue sendo de rápido acesos para o principal parque ecológico da cidade.
+    Qual a distância mínima da praça (região 1) para o parque (região N), considerando todas as ruas da cidade em funcionamento?
+    - Saída: String "Parte 1: ", seguida de distancia_minima_da_regiao_1_para_regiao_N (inteiro). É garantido que há >=1 caminho entre as regiões 1 e N.
+    - RESUMO: Imprimir a menor distância entre 1 e N. '''
+    def dijkstra(self, start: int, end: int) -> list:
         return [-1]
-
-    def find_minimal_streets(self, start: int, end: int) -> set[int]:
+    
+    ''' # Parte 2
+    Identificar todas as ruas que participam de pelo menos uma rota de menor distância da praça para o parque.
+    Essas ruas são candidatas importantes (utilizam com mais frequência).
+    - Saída: String "Parte 2: ", seguida dos índices das ruas que participam de pelo menos um caminho mínimo entre a região 1 e N.
+    - RESUMO: Encontrar todos os caminhos mínimos e imprimir as (índices) arestas que participam desses caminhos. '''
+    def find_minimal_streets(self, start: int, end: int) -> set:
         return {-1}
 
-    def find_critical_streets(self, start: int, end: int) -> set[int]:
+
+    ''' # Parte 3
+    Identificar quais são as ruas críticas da cidade. Essas ruas não podem ser destruidas, visto que caso destruidas, fariam com que a menor distâcia
+    entre 1 e N aumentasse, ou tornaria o acesso impossível.
+    - Saída: String "Parte 3: ", seguida dos índices das ruas críticas, em ordem crescente. Os índices são definidos pela ordem 
+    em que as ruas foram fornecidas na entrada, começando em 1. Se não houver nenhuma, imprima -1.
+    RESUMO: Encontrar todas as (índices) das arestas que, se removidas, fariam com que a distância mínima entre 1 e N aumentasse. "R1 R2 ... RN" '''
+    def find_critical_streets(self, start: int, end: int) -> set:
         return {-1}
 
+    

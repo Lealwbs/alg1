@@ -20,9 +20,9 @@ exp2: string = "Parte 1: 11\nParte 2: 1 3 4 6 7\nParte 3: 7"
 exp3: string = "Parte 1: 4 \nParte 2: 1 3 4 6 \nParte 3: -1"
 
 tests = [
-    (exp1, [".\\tp1\\tests.py", ".\\tests\\testCase01.txt"]),
-    (exp2, [".\\tp1\\tests.py", ".\\tests\\testCase02.txt"]),
-    (exp3, [".\\tp1\\tests.py", ".\\tests\\testCase03.txt"])
+    (exp1, ["tests.py", ".\\tests\\testCase01.txt"]),
+    (exp2, ["tests.py", ".\\tests\\testCase02.txt"]),
+    (exp3, ["tests.py", ".\\tests\\testCase03.txt"])
 ]
 
 errors = []
