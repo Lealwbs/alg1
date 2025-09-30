@@ -32,6 +32,8 @@ class Graph:
         distance[initial_vertex] = 0
         while heap:
             distance_u, u = heappop(heap) # Remove o vértice de menor distancia
+            if distance_u > distance[u]:  # Ignorar estados desatualizados
+                continue
             for v, edge_uv in self.graph[u]: # Para todos os vértices_v e arestas_uv vizinhos de u
                 if distance_u + edge_uv < distance[v]:
                     distance[v] = distance_u + edge_uv
@@ -45,8 +47,8 @@ class Graph:
         return distance[end]
 
     
-    def find_minimal_streets(self, start: int, end: int) -> set:
-        minimal_streets: list[int] = []
+    def find_minimal_edges(self, start: int, end: int) -> list:
+        minimal_streets: list[tuple] = []
         minimal_distance: int = self.get_minimal_distance(start, end)
         distance_from_start: list[int] = self._dijkstra(start)
         distance_from_end: list[int] = self._dijkstra(end)
@@ -54,14 +56,15 @@ class Graph:
             cond1: bool = distance_from_start[u] + length + distance_from_end[v] == minimal_distance
             cond2: bool = distance_from_start[v] + length + distance_from_end[u] == minimal_distance
             if cond1 or cond2:
-                minimal_streets.append(index)
+                minimal_streets.append([index, u, v, length])
         return minimal_streets
 
 
-    def find_critical_streets(self, start: int, end: int) -> set:
+    def find_critical_edges(self, start: int, end: int) -> set:
         critical_streets: list[int] = []
         minimal_distance: int = self.get_minimal_distance(start, end)
-        for index, u, v, length in self.edges:
+        minimal_edges = self.find_minimal_edges(start, end)
+        for index, u, v, length in minimal_edges:
             # Remover aresta para depois adicionar novamente 
             self.graph[u] = [(w, l) for (w, l) in self.graph[u] if w != v or l != length]
             self.graph[v] = [(w, l) for (w, l) in self.graph[v] if w != u or l != length]

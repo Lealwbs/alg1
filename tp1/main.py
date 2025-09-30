@@ -44,10 +44,10 @@ def main(argv=sys.argv) -> str:
     distance: int = g.get_minimal_distance(1, vertex_count)
     result = f"Parte 1: {distance}\n"
 
-    minimal_streets: set[int] = g.find_minimal_streets(1, vertex_count)
-    result += f"Parte 2: " + " ".join(str(street) for street in sorted(minimal_streets)) + "\n"
+    minimal_streets: list[tuple] = g.find_minimal_edges(1, vertex_count)
+    result += f"Parte 2: " + " ".join(str(index) for index, u, v, length in sorted(minimal_streets)) + "\n"
 
-    critical_streets: set[int] = g.find_critical_streets(1, vertex_count)
+    critical_streets: set[int] = g.find_critical_edges(1, vertex_count)
     if len(critical_streets) == 0: 
         result += "Parte 3: -1"
     else: 
