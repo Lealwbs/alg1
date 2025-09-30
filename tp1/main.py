@@ -2,6 +2,7 @@ import os
 import sys
 from graph import Graph
 
+
 # Usado para caso os arquivos de teste .txt estejam em uma pasta diferente do main.py
 def get_filepath(filename: str) -> str:
     candidate_paths = [
@@ -28,34 +29,30 @@ def main(argv=sys.argv) -> str:
     else:
         raise ValueError("Please provide an input file (argument or stdin).")
 
-    # Só a primeira linha é lida separadamente para pegar só número de vértices
+    # Só a primeira linha é lida separadamente para pegar só o número de vértices
     header = lines[0].strip().split()
     vertex_count = int(header[0])
-
     g: Graph = Graph(vertex_count)
-
     for line in lines[1:]:
-        data_str: list[str] = line.strip().split()
-        data_int: list[int] = [int(x) for x in data_str]
-        vertex_a, vertex_b, street_length = data_int
+        data: list[str] = line.strip().split()
+        edge: list[int] = [int(x) for x in data]
+        vertex_a, vertex_b, street_length = edge
         g.add_edge(vertex_a, vertex_b, street_length)
-
-    print(g)
-    print(g.graph)
 
     distance: int = g.get_minimal_distance(1, vertex_count)
     result = f"Parte 1: {distance}\n"
 
-    minimal_streets: list[int] = g.find_minimal_streets(1, vertex_count)
+    minimal_streets: set[int] = g.find_minimal_streets(1, vertex_count)
     result += f"Parte 2: " + " ".join(str(street) for street in sorted(minimal_streets)) + "\n"
 
     critical_streets: set[int] = g.find_critical_streets(1, vertex_count)
-    if len(critical_streets) == 0:
+    if len(critical_streets) == 0: 
         result += "Parte 3: -1"
-    else:
+    else: 
         result += f"Parte 3: " + " ".join(str(street) for street in sorted(critical_streets))
 
-    return result
+    return result 
+
 
 if __name__ == "__main__":
     output = main()
