@@ -42,9 +42,8 @@ def main(argv=sys.argv) -> str:
 
     #print(g)
 
-    path: list[int] = g.get_minimal_path(1, vertex_count)
-    print(path)
-    result = f"Parte 1: {len(path)}\n"
+    distance: int = g.get_minimal_distance(1, 3)
+    result = f"Parte 1: {distance}\n"
 
     minimal_streets: set[int] = g.find_minimal_streets(1, vertex_count)
     result += f"Parte 2: {sorted(minimal_streets)}\n"
