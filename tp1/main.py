@@ -25,7 +25,7 @@ def main(argv=sys.argv) -> str:
         with open(filepath, "r") as file:
             lines = file.readlines()
     elif not sys.stdin.isatty():
-        lines = input().splitlines()
+        lines = sys.stdin.readlines()
     else:
         raise ValueError("Please provide an input file (argument or stdin).")
 
@@ -35,6 +35,8 @@ def main(argv=sys.argv) -> str:
     g: Graph = Graph(vertex_count)
     for line in lines[1:]:
         data: list[str] = line.strip().split()
+        if not data:
+            continue
         edge: list[int] = [int(x) for x in data]
         vertex_a, vertex_b, street_length = edge
         g.add_edge(vertex_a, vertex_b, street_length)
