@@ -17,7 +17,7 @@ def assertionErrorText(exp: string, act: string) -> string:
 
 exp1: string = "Parte 1: 10\nParte 2: 2\nParte 3: 2"
 exp2: string = "Parte 1: 11\nParte 2: 1 3 4 6 7\nParte 3: 7"
-exp3: string = "Parte 1: 4 \nParte 2: 1 3 4 6 \nParte 3: -1"
+exp3: string = "Parte 1: 4\nParte 2: 1 3 4 6\nParte 3: -1"
 
 tests = [
     (exp1, ["tests.py", ".\\tests\\testCase01.txt"]),

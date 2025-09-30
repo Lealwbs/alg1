@@ -4,54 +4,50 @@ from heapq import heapify, heappop, heappush
 class Graph:
     def __init__(self, vertex_count: int) -> None: 
         self.vertex_count: int = vertex_count 
-        #self.edges: list[tuple[int, int, int]] = []
-
-        #dict: {int index_vertex, list[(int conected_vertex, int length)]}
+        self.edge_count: int = 0
+        
+        # GRAFO = {vertice1: [(vertice2, distancia), (vertice3, distancia), ...]; ...}
         self.graph: dict[int, list[tuple[int, int]]] = { i: [] for i in range(1, vertex_count + 1) }
+        
+        # ARESTAS = [(aresta1, vertice1, vertice2, distancia), (aresta2, vertice1, vertice3, distancia), ...]
+        self.edges: list[tuple[int, int, int, int]] = []
+
 
     def __str__(self) -> str:
-        # Escrever uma forma melhor de representar o grafo:
         result = f"Grafo({self.vertex_count} vertices e {len(self.edges)} arestas):\n"
-        for from_vertex, to_vertex, length in self.edges:
-            result += f"  {from_vertex} <--({length})--> {to_vertex}\n"
+        for index, from_vertex, to_vertex, length in self.edges:
+            result += f"Edge {index}:  {from_vertex} <--({length})--> {to_vertex}\n"
         return result
         
-    # Por o grafo ser bidirecionado, a função add_edge já adiciona as duas direções
+    
     def add_edge(self, from_vertex: int, to_vertex: int, length: int) -> None:
-        #self.edges.append((from_vertex, to_vertex, length))
+        self.edge_count += 1
+        self.edges.append((self.edge_count, from_vertex, to_vertex, length))
+
+        # O grafo é bidirecionado, com a mesma distancia p/ os 2 lados (ruas)
         self.graph[from_vertex].append((to_vertex, length))
         self.graph[to_vertex].append((from_vertex, length))
 
 
-    ''' # Parte 1
-    Praça central continue sendo de rápido acesos para o principal parque ecológico da cidade.
-    Qual a distância mínima da praça (região 1) para o parque (região N), considerando todas as ruas da cidade em funcionamento?
-    - Saída: String "Parte 1: ", seguida de distancia_minima_da_regiao_1_para_regiao_N (inteiro). É garantido que há >=1 caminho entre as regiões 1 e N.
-    - RESUMO: Imprimir a menor distância entre 1 e N. '''
-    def get_minimal_distance(self, start: int, end: int) -> list:
+    def _dijkstra(self, initial_vertex: int) -> list:
+        heap: list[int, int] = [(0, initial_vertex)] # (distância_acumulada, indice_vértice)
         parent: list[int] = [-1] * (self.vertex_count + 1)
         distance: list[int] = [float('inf')] * (self.vertex_count + 1)
-    
-        self._dijkstra(start, parent, distance)
-        return distance[end]
-    
-
-    def _dijkstra(self, initial_vertex: int, parent: list[int], distance: list[int]) -> None:
         distance[initial_vertex] = 0
-        heap: list[int, int] = [(0, initial_vertex)] # (distância_acumulada, indice_vértice)
+
         while heap:
-            current_distance, u = heappop(heap)
-            for v, length in self.graph[u]: # Para todos os vértices adjacentes de u
-                if current_distance + length < distance[v]:
-                    distance[v] = current_distance + length
+            distance_u, u = heappop(heap) # Remove o vértice de menor distancia
+            for v, edge_uv in self.graph[u]: # Para todos os vértices_v e arestas_uv vizinhos de u
+                if distance_u + edge_uv < distance[v]:
+                    distance[v] = distance_u + edge_uv
                     parent[v] = u
                     heappush(heap, (distance[v], v))
+        return distance
 
 
     def _bfs(self, initial_vertex: int, parent: list[int], marked: list[bool]):
         marked[initial_vertex] = True  
-        queue: Queue[int] = Queue()
-        queue.put(initial_vertex)
+        queue: Queue[int] = Queue(initial_vertex)
         while not queue.empty():
             v: int = queue.get()
             for adjacent_vertex_index, length in self.graph[v]:
@@ -62,21 +58,33 @@ class Graph:
                     queue.put(u)
 
 
+    # Parte 1 - Calcular a menor distância entre 1 e N.
+    def get_minimal_distance(self, start: int, end: int) -> int:
+        distance: list[int] = self._dijkstra(initial_vertex = start)
+
+        return distance[end]
     
-    ''' # Parte 2
-    Identificar todas as ruas que participam de pelo menos uma rota de menor distância da praça para o parque.
-    Essas ruas são candidatas importantes (utilizam com mais frequência).
-    - Saída: String "Parte 2: ", seguida dos índices das ruas que participam de pelo menos um caminho mínimo entre a região 1 e N.
-    - RESUMO: Encontrar todos os caminhos mínimos e imprimir as (índices) arestas que participam desses caminhos. '''
-    def find_minimal_streets(self, start: int, end: int) -> set:
-        return {-1}
+
+    # Parte 2 - Encontrar todas as arestas (índices) que fazem parte de algum caminho mínimo.
+    def find_minimal_streets(self, start: int, end: int) -> list:  #-> set:
+        minimal_streets: list[int] = []
+        minimal_distance: int = self.get_minimal_distance(start, end)
+        distance_from_start: list[int] = self._dijkstra(start)
+        distance_from_end: list[int] = self._dijkstra(end)
+        for index, u, v, length in self.edges: # Para todas as arestas (index, vertice1, vertice2, distancia) do grafo
+            cond1: bool = distance_from_start[u] + length + distance_from_end[v] == minimal_distance
+            cond2: bool = distance_from_start[v] + length + distance_from_end[u] == minimal_distance
+            if cond1 or cond2:
+                minimal_streets.append(index)
+        return minimal_streets
 
 
-    ''' # Parte 3
-    Identificar quais são as ruas críticas da cidade. Essas ruas não podem ser destruidas, visto que caso destruidas, fariam com que a menor distâcia
+    # Parte 3 - Encontrar as ruas críticas que aumentariam a distância mínima entre 1 e N.
+    ''' Identificar quais são as ruas críticas da cidade. Essas ruas não podem ser destruidas, visto que caso destruidas, fariam com que a menor distâcia
     entre 1 e N aumentasse, ou tornaria o acesso impossível.
     - Saída: String "Parte 3: ", seguida dos índices das ruas críticas, em ordem crescente. Os índices são definidos pela ordem 
     em que as ruas foram fornecidas na entrada, começando em 1. Se não houver nenhuma, imprima -1.
     RESUMO: Encontrar todas as (índices) das arestas que, se removidas, fariam com que a distância mínima entre 1 e N aumentasse. "R1 R2 ... RN" '''
     def find_critical_streets(self, start: int, end: int) -> set:
-        return {-1}
+        critical_streets: list[int] = []
+        return critical_streets

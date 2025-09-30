@@ -40,19 +40,20 @@ def main(argv=sys.argv) -> str:
         vertex_a, vertex_b, street_length = data_int
         g.add_edge(vertex_a, vertex_b, street_length)
 
-    #print(g)
+    print(g)
+    print(g.graph)
 
     distance: int = g.get_minimal_distance(1, vertex_count)
     result = f"Parte 1: {distance}\n"
 
-    minimal_streets: set[int] = g.find_minimal_streets(1, vertex_count)
-    result += f"Parte 2: {sorted(minimal_streets)}\n"
+    minimal_streets: list[int] = g.find_minimal_streets(1, vertex_count)
+    result += f"Parte 2: " + " ".join(str(street) for street in sorted(minimal_streets)) + "\n"
 
     critical_streets: set[int] = g.find_critical_streets(1, vertex_count)
     if len(critical_streets) == 0:
         result += "Parte 3: -1"
     else:
-        result += f"Parte 3: {sorted(critical_streets)}"
+        result += f"Parte 3: " + " ".join(str(street) for street in sorted(critical_streets))
 
     return result
 
