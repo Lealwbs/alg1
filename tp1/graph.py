@@ -1,8 +1,13 @@
+from queue import Queue
+from heapq import Heapify, Heappop, Heappush
+
 class Graph:
     def __init__(self, vertex_count: int) -> None: 
         self.vertex_count: int = vertex_count 
-        self.edges: list[tuple[int, int, int]] = []
-        self.graph: dict[int, list[tuple[int, int, int]]] = { i: [] for i in range(1, vertex_count + 1) }
+        #self.edges: list[tuple[int, int, int]] = []
+
+        #dict: {int index_vertex, list[(int conected_vertex, int length)]}
+        self.graph: dict[int, list[tuple[int, int]]] = { i: [] for i in range(1, vertex_count + 1) }
 
     def __str__(self) -> str:
         # Escrever uma forma melhor de representar o grafo:
@@ -14,7 +19,7 @@ class Graph:
 
     # Por o grafo ser bidirecionado, a função add_edge já adiciona as duas direções
     def add_edge(self, from_vertex: int, to_vertex: int, length: int) -> None:
-        self.edges.append((from_vertex, to_vertex, length))
+        #self.edges.append((from_vertex, to_vertex, length))
         self.graph[from_vertex].append((to_vertex, length))
         self.graph[to_vertex].append((from_vertex, length))
 
@@ -24,8 +29,74 @@ class Graph:
     Qual a distância mínima da praça (região 1) para o parque (região N), considerando todas as ruas da cidade em funcionamento?
     - Saída: String "Parte 1: ", seguida de distancia_minima_da_regiao_1_para_regiao_N (inteiro). É garantido que há >=1 caminho entre as regiões 1 e N.
     - RESUMO: Imprimir a menor distância entre 1 e N. '''
-    def dijkstra(self, start: int, end: int) -> list:
-        return [-1]
+    def get_minimal_path(self, start: int, end: int) -> list:
+        parent: list[int] = [-1] * (self.vertex_count + 1)
+        marked: list[bool] = [False] * (self.vertex_count + 1)
+        label: list[int] = [float('inf')] * (self.vertex_count + 1)
+        path: list[int] = []
+
+        #self._bfs(start, parent, marked)
+        self._prim(start, parent, marked, label)
+
+        print(parent)
+        v = end
+        while v != -1:
+            path.append(v)
+            v = parent[v]
+
+        path.reverse()
+        return path
+    
+#     Enquanto o heap não estiver vazio
+# • Remover o menor elemento (min) e marcá-lo
+# • Para cada vértice v adjacente a min
+# • Se v não estiver marcado e p(min,v) < rotulo[v]
+    # • Antecessor[v] = min
+    # • Heap.atualizaChave(v,p(min,v))
+    # • rotulo[v] = p(min,v)
+
+    def _prim(self, initial_vertex: int, parent: list[int], marked: list[bool], label: list[int]):
+        label[initial_vertex] = 0
+        heap: list[(int, int)] = {(initial_vertex, 0)}
+        while len(heap) != 0:
+            minimal = Heappop(heap)
+            marked[minimal] = True
+            for adjacent_vertex_index, length in self.graph[minimal]:
+                if marked[adjacent_vertex_index] == False and length < label[adjacent_vertex_index]:
+                    parent[adjacent_vertex_index] = minimal
+
+
+
+
+        
+        pass
+    
+    def _bfs(self, initial_vertex: int, parent: list[int], marked: list[bool]):
+        marked[initial_vertex] = True  
+        queue: Queue[int] = Queue()
+        queue.put(initial_vertex)
+        while not queue.empty():
+            v: int = queue.get()
+            for adjacent_vertex_index, length in self.graph[v]:
+                u: int = adjacent_vertex_index
+                if not marked[u]:
+                    marked[u] = True
+                    parent[u] = v
+                    queue.put(u)
+
+
+
+
+
+
+# caminho(origem, v, antecessor)
+#     se origem == v
+#         imprimir v
+#     senão se antecessor[v] == -1
+#         imprimir "não há caminho entre os vértices”
+#     senão
+#         caminho(origem, antecessor[v], antecessor)
+
     
     ''' # Parte 2
     Identificar todas as ruas que participam de pelo menos uma rota de menor distância da praça para o parque.
@@ -44,5 +115,3 @@ class Graph:
     RESUMO: Encontrar todas as (índices) das arestas que, se removidas, fariam com que a distância mínima entre 1 e N aumentasse. "R1 R2 ... RN" '''
     def find_critical_streets(self, start: int, end: int) -> set:
         return {-1}
-
-    

@@ -42,7 +42,8 @@ def main(argv=sys.argv) -> str:
 
     #print(g)
 
-    path: list[int] = g.dijkstra(1, vertex_count)
+    path: list[int] = g.get_minimal_path(1, vertex_count)
+    print(path)
     result = f"Parte 1: {len(path)}\n"
 
     minimal_streets: set[int] = g.find_minimal_streets(1, vertex_count)
