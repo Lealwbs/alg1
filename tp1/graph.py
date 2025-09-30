@@ -30,45 +30,22 @@ class Graph:
     - RESUMO: Imprimir a menor distância entre 1 e N. '''
     def get_minimal_distance(self, start: int, end: int) -> list:
         parent: list[int] = [-1] * (self.vertex_count + 1)
-        marked: list[bool] = [False] * (self.vertex_count + 1)
-        label: list[int] = [float('inf')] * (self.vertex_count + 1)
-        path: list[int] = []
-
-        self._prim(start, parent, marked, label)
-
-        print(parent)
-        v = end
-        while v != -1:
-            path.append(v)
-            v = parent[v]
-
-        path.reverse()
-        return label[end]
+        distance: list[int] = [float('inf')] * (self.vertex_count + 1)
     
-#     Enquanto o heap não estiver vazio
-# • Remover o menor elemento (min) e marcá-lo
-# • Para cada vértice v adjacente a min
-# • Se v não estiver marcado e p(min,v) < rotulo[v]
-    # • Antecessor[v] = min
-    # • Heap.atualizaChave(v,p(min,v))
-    # • rotulo[v] = p(min,v)
+        self._dijkstra(start, parent, distance)
+        return distance[end]
+    
 
-    def _dijkstra(self, initial_vertex: int, parent: list[int], distances: list[int])
-
-
-
-
-    def _prim(self, initial_vertex: int, parent: list[int], marked: list[bool], label: list[int]):
-        label[initial_vertex] = 0
-        heap: list[int, int] = [(0, initial_vertex)]   #(weigth, vertex)
+    def _dijkstra(self, initial_vertex: int, parent: list[int], distance: list[int]) -> None:
+        distance[initial_vertex] = 0
+        heap: list[int, int] = [(0, initial_vertex)] # (distância_acumulada, indice_vértice)
         while heap:
-            _, u = heappop(heap)
-            marked[u] = True
-            for v, length in self.graph[u]: # Adjacentes
-                if not marked[v] and length < label[v]:
+            current_distance, u = heappop(heap)
+            for v, length in self.graph[u]: # Para todos os vértices adjacentes de u
+                if current_distance + length < distance[v]:
+                    distance[v] = current_distance + length
                     parent[v] = u
-                    label[v] = length
-                    heappush(heap, (length, v))
+                    heappush(heap, (distance[v], v))
 
 
     def _bfs(self, initial_vertex: int, parent: list[int], marked: list[bool]):

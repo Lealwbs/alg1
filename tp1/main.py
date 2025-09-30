@@ -42,7 +42,7 @@ def main(argv=sys.argv) -> str:
 
     #print(g)
 
-    distance: int = g.get_minimal_distance(1, 3)
+    distance: int = g.get_minimal_distance(1, vertex_count)
     result = f"Parte 1: {distance}\n"
 
     minimal_streets: set[int] = g.find_minimal_streets(1, vertex_count)
