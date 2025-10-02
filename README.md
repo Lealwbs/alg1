@@ -316,27 +316,143 @@ Custo: O(V \* E), pois executa O(V) relaxações em todas as arestas
 
 
 
-##### 
-
-
-
 
 
 ##### **Algoritmo de Ford-Fulkerson**
+
+**Fluxo máximo em: Origem S -> Intermediários -> Destino T**
+
+**Os pessos associados à arestas são chamados de capacidade.**
+
+
+
+Objetivo: Determinar um fluxo máximo entre a origem e destino, os vértices intermediários não retém fluxo.
+
+**Conservação de fluxo:** Fluxo de entrada = Fluxo de Saída. Fluxo transmitido por uma rede = Fluxo que sai por S
+
+**Restrição de capacidade:** O fluxo de uma aresta não pode ultrapassar a capacidade máxima.
+
+
+
+Inicializamos todos os fluxos com zero, em seguida buscamos um caminho entre s e t sem saturar capacidade das arestas
+
+Aresta pra frente (Forward Edges): Aumentar o fluxo na direção da aresta (u,v)
+
+Aresta pra trás (Backward Edges): "Devolver" o fluxo na aresta (u,v)
+
+P = Caminho aumentante: caminho simples entre S e T no grafo residual Gf
+
+R = Gargalo de P: Menor capacidade das arestas
+
+
+
+Aumentar Fluxo: Se (u,v) é uma aresta para frente, o fluxo += R, se (u, v) é pra trás, fluxo (v, u) -= r
+
+
+
+Alogrítmo: Para todo vértice do grafo, fluxo = 0. Enquanto existir caminho aumentante, (ou seja, no grafo residual, enquanto tiver como S chegar a T), aumenta o fluxo das arestas do caminho aumentante, e faz isso até não existir mais caminho aumentante (de S até T)
+
+
+
+Se as capacidades forem irracionais, o algorítmo pode não chegar num resultado, mas se forem inteiras, ele converge
+
+
+
+Inicializar todos fluxos com zero = O(E)
+
+Fluxo máximo = F, o incremento é pelo menos >= 1, logo, o ciclo principal é executado no máximo F vezes
+
+Computar um caminho com DFS ou BFS: em Gf tem custo O(E)
+
+Aumentar fluxo avalia todas as arestas do caminho simples O(V)
+
+A construção do gráfico residual é O(E)
+
+**Custo:** O(F \* E), pois V <= E
 
 
 
 ##### **Teorema Max-Flow Min-Cut**
 
+**Em todo fluxo em redes, o valor do fluxo máximo é igual ao valor da menor capacidade de um corte s-t**
+
 
 
 ##### **Algoritmo Capacity-Scaling**
+
+**Eleger o caminho aumentante com o maior gargalo, buscando eles com gargalos, no mínimo, iguais a um parâmetro Δ**
+
+Para isso, busca um caminho aumentante num subconjunto do grafo residual com somente as arestas com capacidade >= Δ
+
+
+
+O algoritmo inicia com Δ **= 2^lg(maior\_capacidade\_de\_saida\_de\_S)**
+
+Depois reduz pela metade, o ciclo repete enquanto Δ >= 1
+
+
+
+Assim, pra cada aresta, ele seta o fluxo = 0, faz o grafo residual, e enquanto Δ >= 1,
+
+enquanto existir caminho aumentando no Gf(Δ) (grafo residual que contém só as arestas dentro do parâmetro.
+
+Ele acha o caminho (de s à t) nessas arestas, aumenta o fluxo, faz o grafo residual novamente, e divide o parametro Δ por 2
+
+Na última iteração com Δ=1, o algoritmo é idêntico a Ford-Fulkerson
+
+
+
+O laço externo controlandO o parâmetro é executado no máximo O(lg(C))
+
+Custo: O(E² \* lg(C))
 
 
 
 
 
 ##### **Algoritmo de Edmonds-Karp**
+
+**Modificação do algoritmo de Ford-Fulkerson**
+
+
+
+O caminho é recuperado através de uma modificação da busca em largura, ou seja, ele é o menor caminho aumentante (em número de arestas), O(E)
+
+Os caminhos podem ter tamanho de 1 a V, CADA ARESTA PODE PARTICIPAR DE UM CAMINHO DE TAMANHO k, logho existem no máximo O(VE) caminhos aumentantes
+
+essa modificação faz com que o custo seja O(E²\* V)
+
+
+
+Resumo:
+
+
+
+| Algoritmo                          | Objetivo principal                                                             | Complexidade                            | Observação / Lógica principal                                                                |
+
+| ---------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------- | -------------------------------------------------------------------------------------------- |
+
+| \*\*DFS (Depth-First Search)\*\*       | Explorar todos os vértices/arestas, verificar conectividade, detectar ciclos   | O(V + E)                                | Vai “profundamente” até não poder mais; útil para componentes conexos, topological sort etc. |
+
+| \*\*BFS (Breadth-First Search)\*\*     | Explorar vértices por camadas, achar caminho mais curto em grafo não ponderado | O(V + E)                                | Visita primeiro os vértices mais próximos; gera árvore de camadas.                           |
+
+| \*\*Karzanov–Sharir (fluxo máximo)\*\* | Algoritmo polinomial para fluxo máximo (similar ao Dinic, mas menos eficiente) | O(V²E)                                  | Usa caminhos aumentantes em camadas; precursor do Dinic.                                     |
+
+| \*\*Prim\*\*                           | Encontrar Árvore Geradora Mínima (MST)                                         | O(E log V) (com heap)                   | Expande a MST a partir de um vértice, sempre pegando a aresta mais barata que conecta.       |
+
+| \*\*Kruskal\*\*                        | Encontrar Árvore Geradora Mínima (MST)                                         | O(E log V)                              | Ordena arestas e une componentes com Union-Find; cresce pela menor aresta global.            |
+
+| \*\*Dijkstra\*\*                       | Caminho mínimo a partir de uma origem (sem pesos negativos)                    | O((V + E) log V) (com heap)             | Relaxa arestas, escolhendo sempre o vértice de menor distância ainda não processado.         |
+
+| \*\*Bellman-Ford\*\*                   | Caminho mínimo com pesos negativos (sem ciclos negativos)                      | O(VE)                                   | Relaxa todas as arestas V-1 vezes; detecta ciclos negativos.                                 |
+
+| \*\*Ford-Fulkerson\*\*                 | Fluxo máximo em grafos com capacidades                                         | O(EF), onde F = fluxo máximo            | Aumenta fluxo via caminhos aumentantes; complexidade depende do valor de F.                  |
+
+| \*\*Capacity Scaling\*\*               | Fluxo máximo otimizado com escalonamento de capacidade                         | O(E² log U), onde U = capacidade máxima | Busca caminhos aumentantes só com arestas de capacidade ≥ Δ; Δ diminui exponencialmente.     |
+
+| \*\*Edmonds-Karp\*\*                   | Fluxo máximo com escolha do menor caminho aumentante (BFS)                     | O(VE²)                                  | Garante polinomial; cada aresta pode saturar/dessaturar O(V) vezes.                          |
+
+
 
 
 
