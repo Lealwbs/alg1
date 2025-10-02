@@ -228,15 +228,115 @@ V operações de make-set = O(V) \* 1 = O(V)
 
 E operações de find-set e union para cada aresta = E \* (find-set + union)
 
-com Union-Find com as 2 otimizações, temos que find-set + union = k(V), onde o crescimento é quase constante, assim fica: O(E) \* O(k(V))
+com Union-Find com as 2 otimizações, temos que find-set + union = k(V) + O(1) = k(V), onde o crescimento é quase constante, assim fica: O(E) \* O(k(V))
 
 Como E < V², O (log(E) = O(log(V)), então:
 
-**Custo:** O(E log(V)) + O(V) + O(E \* k(V)) = O(E log(V)), igual a prim
+**Custo:** O(E log(V)) + O(V) + O(E \* k(V)) = O(E \* log(V)), igual a prim
 
 
 
 
+
+###### Todos subcaminho de um caminho mais curto é um caminho mais curto
+
+
+
+##### **Algoritmo de Dijkstra**
+
+**Não admite arestas negativas**
+
+* Caminhos mais curtos a partir de uma única origem
+* Encontrar o caminho mais curto para um único destino
+* Encontrar o menor caminho entre um par de vértices
+* Encontrar o menor caminho entre todos os pares de vértices
+
+
+
+É parecido com Prim, usa estratégia gulosa, e encontra a solução ótima
+
+
+
+VETOR \[PESOS\_ESTIMADOS]: todos = infinito, exceto \[0] = 0 - Estimativa (limite superior) de menor caminho entre S e os demais
+
+Caso exista um caminho mais curto p/ V que a estimativa atual, o antecessor e a estimativa de V são atualizados. (Relaxados)
+
+VETOR \[ANTECESSORES]: todos = -1
+
+MINHEAP com os PESOS\_ESTIMADOS como chave
+
+
+
+Enquanto o heap não tiver vazio, pega o menor (inicialmente o 0:start), e pra cada vértice adjacente, relaxa o vértice,
+
+ou seja, se o caminho atual de start->vertice\_v for menor que algum outro caminho guardado anteriormente, troca e muda o pai.
+
+
+
+Vetor de antecessores: O(V)
+
+Laço, todos os vértices: O(V), cada chamada remove o menor elemento do heap O(log(V)) = O(V\*log(V)
+
+Todas as arestas são avaliadas, ou seja, são feitos no pior caso O(E) relaxamentos, incorrendo O(log(V)) cada um = O(E\*log(V))
+
+**Custo:** O(V\*log(V) + E\*log(V)) = O((V+E) \* log(V)) = O(E \* log(V))
+
+
+
+
+
+##### **Algoritmo de Bellman-Ford**
+
+**Admite arestas negativas**
+
+* Computa o caminho mais curto
+* Detecta ciclos negativos (retorna falso caso exista ciclo negativo)
+
+
+
+Relaxa as arestas do grafo V-1 vezes, se depois de todas as iterações, existirem vértices relaxaveis, então existe ciclo negativo no grafo.
+
+
+
+VETOR \[PESOS\_ESTIMADOS]: todos = infinito, exceto \[0] = 0 
+
+VETOR \[ANTECESSORES]: todos = -1
+
+
+
+Loopa V-1 vezes: Para cada aresta do grafo, relaxa ela
+
+Depois, para cada a aresta, se for possível relaxar mais uma vez, tem ciclo negativo e retorna falso. Se não houver ciclos, retorna verdadeiro
+
+
+
+Custo: O(V \* E), pois executa O(V) relaxações em todas as arestas
+
+É mais caro que Dijkstra, mas não assume que os pesos são positivos.
+
+
+
+##### 
+
+
+
+
+
+##### **Algoritmo de Ford-Fulkerson**
+
+
+
+##### **Teorema Max-Flow Min-Cut**
+
+
+
+##### **Algoritmo Capacity-Scaling**
+
+
+
+
+
+##### **Algoritmo de Edmonds-Karp**
 
 
 
