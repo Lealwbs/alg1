@@ -1,0 +1,3 @@
+Parte 1: 4
+Parte 2: 1 3 4 6
+Parte 3: -1
