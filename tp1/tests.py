@@ -15,25 +15,24 @@ WHITE = '\033[97m'
 def assertionErrorText(exp: string, act: string) -> string:
     return f"""{BOLD}{GREEN}\nExpected:\n{RESET}{exp}{BOLD}{RED}\nActual:\n{RESET}{act}\n"""
 
-exp1: string = "Parte 1: 10\nParte 2: 2\nParte 3: 2"
-exp2: string = "Parte 1: 11\nParte 2: 1 3 4 6 7\nParte 3: 7"
-exp3: string = "Parte 1: 4\nParte 2: 1 3 4 6\nParte 3: -1"
 
-tests = [
-    (exp1, ["tests.py", ".\\tests\\testCase01.txt"]),
-    (exp2, ["tests.py", ".\\tests\\testCase02.txt"]),
-    (exp3, ["tests.py", ".\\tests\\testCase03.txt"])
-]
+tests_path = ".\\tests\\"
+tests = [ (i, f"{tests_path}in{i:02}.txt", f"{tests_path}out{i:02}.txt")
+    for i in range(1, 14) ]
 
 errors = []
 
 if __name__ == "__main__":
-    for i, (expected, argv) in enumerate(tests, 1):
+    for i, in_file, out_file in tests:
+        print(f"{BOLD}{CYAN}Running test {i}/{len(tests)}...{RESET}")
         try:
-            actual = main.main(argv=argv)
+            actual = main.main(argv=["tests.py", in_file])
+            with open(out_file, "r") as f:
+                expected = f.read()
             assert expected == actual, assertionErrorText(expected, actual)
         except AssertionError as e:
             errors.append(f"{BOLD}{CYAN}Test {i} failed:{e}{RESET}")
+
 
     print(f"{BOLD}{CYAN}"
           f"========================================\n" f"#{WHITE}"
