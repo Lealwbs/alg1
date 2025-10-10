@@ -31,7 +31,7 @@ def main(argv=sys.argv) -> str:
 
     # Só a primeira linha é lida separadamente para pegar só o número de vértices
     header = lines[0].strip().split()
-    vertex_count = int(header[0])
+    vertex_count = int(header[0]) # Quantidade de vértices = ID do Parque
     g: Graph = Graph(vertex_count)
     for line in lines[1:]:
         data: list[str] = line.strip().split()

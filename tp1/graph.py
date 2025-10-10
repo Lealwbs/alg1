@@ -2,7 +2,7 @@ from heapq import heappop, heappush
 
 class Graph:
     def __init__(self, vertex_count: int) -> None: 
-        self.vertex_count: int = vertex_count 
+        self.vertex_count: int = vertex_count
         self.edge_count: int = 0
         # GRAFO = {vertice1: [(vertice2, distancia), (vertice3, distancia), ...]; ...}
         self.graph: dict[int, list[tuple[int, int]]] = { i: [] for i in range(1, vertex_count + 1) }
@@ -20,10 +20,32 @@ class Graph:
     
     def add_edge(self, from_vertex: int, to_vertex: int, length: int) -> None:
         self.edge_count += 1
-        self.edges.append((self.edge_count, from_vertex, to_vertex, length))
+        self.edges.append([self.edge_count, from_vertex, to_vertex, length])
         # O grafo é bidirecionado, com a mesma distancia p/ os 2 lados (ruas)
         self.graph[from_vertex].append((to_vertex, length))
         self.graph[to_vertex].append((from_vertex, length))
+
+    
+    def get_edge_count(self) -> int:
+        return len(self.edges)
+
+    
+    def get_vertex_count(self) -> int:
+        return len(self.graph)
+    
+
+    def _dfs(self, initial_vertex: int) -> set:
+        stack: list[int] = [initial_vertex]
+        visited: set = set()
+        
+        while stack:
+            vertex: int = stack.pop()
+            if vertex not in visited:
+                visited.add(vertex)
+                for neighbor, length in self.graph[vertex]:
+                    if neighbor not in visited:
+                        stack.append(neighbor)
+        return visited
 
 
     def _dijkstra(self, initial_vertex: int) -> list:
@@ -31,6 +53,7 @@ class Graph:
         parent: list[int] = [-1] * (self.vertex_count + 1)
         distance: list[int] = [float('inf')] * (self.vertex_count + 1)
         distance[initial_vertex] = 0
+
         while heap:
             distance_u, u = heappop(heap) # Remove o vértice de menor distancia
             if distance_u > distance[u]:  # Ignorar estados desatualizados
@@ -49,29 +72,40 @@ class Graph:
 
     
     def find_minimal_edges(self, start: int, end: int) -> list:
+        self.minimal_edges = []
         distance_from_start: list[int] = self._dijkstra(start)
         distance_from_end: list[int] = self._dijkstra(end)
         minimal_distance: int = distance_from_start[end]
+
         for index, u, v, length in self.edges:
             cond1: bool = distance_from_start[u] + length + distance_from_end[v] == minimal_distance
             cond2: bool = distance_from_start[v] + length + distance_from_end[u] == minimal_distance
             if cond1 or cond2:
                 self.minimal_edges.append([index, u, v, length])
         return self.minimal_edges
-
-
+    
+    
     def find_critical_edges(self, start: int, end: int) -> set:
         if not self.minimal_edges: 
             self.find_minimal_edges(start, end) # Usado para evitar chamadas duplicadas
-        minimal_distance: int = self.get_minimal_distance(start, end)
+          
         critical_streets: list[int] = []
+        minimal_graph: Graph = Graph(self.vertex_count)
+
         for index, u, v, length in self.minimal_edges:
-            # Remover a aresta para depois adicionar novamente
-            self.graph[u] = [(w, l) for (w, l) in self.graph[u] if w != v or l != length]
-            self.graph[v] = [(w, l) for (w, l) in self.graph[v] if w != u or l != length]
-            new_distance: int = self.get_minimal_distance(start, end)
-            self.graph[u].append((v, length))
-            self.graph[v].append((u, length))
-            if new_distance > minimal_distance:
+            minimal_graph.graph[u].append((v, length))
+            minimal_graph.graph[v].append((u, length))
+            minimal_graph.edges.append((index, u, v, length))
+
+        for index, u, v, length in minimal_graph.edges:
+            # Remover a aresta
+            minimal_graph.graph[u] = [(w, l) for (w, l) in minimal_graph.graph[u] if w != v or l != length]
+            minimal_graph.graph[v] = [(w, l) for (w, l) in minimal_graph.graph[v] if w != u or l != length]
+            # Verificar se o index final foi alcançado pelo dfs:
+            reachable_vertices: set = minimal_graph._dfs(start)
+            if end not in reachable_vertices:
                 critical_streets.append(index)
+            # Adicionar a aresta novamente
+            minimal_graph.graph[u].append((v, length))
+            minimal_graph.graph[v].append((u, length))
         return critical_streets
