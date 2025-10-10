@@ -8,6 +8,7 @@ class Graph:
         self.graph: dict[int, list[tuple[int, int]]] = { i: [] for i in range(1, vertex_count + 1) }
         # ARESTAS = [(aresta1, vertice1, vertice2, distancia), (aresta2, vertice1, vertice3, distancia), ...]
         self.edges: list[tuple[int, int, int, int]] = []
+        self.minimal_edges: list[tuple[int, int, int, int]] = []
 
 
     def __str__(self) -> str:
@@ -48,24 +49,24 @@ class Graph:
 
     
     def find_minimal_edges(self, start: int, end: int) -> list:
-        minimal_streets: list[tuple] = []
-        minimal_distance: int = self.get_minimal_distance(start, end)
         distance_from_start: list[int] = self._dijkstra(start)
         distance_from_end: list[int] = self._dijkstra(end)
+        minimal_distance: int = distance_from_start[end]
         for index, u, v, length in self.edges:
             cond1: bool = distance_from_start[u] + length + distance_from_end[v] == minimal_distance
             cond2: bool = distance_from_start[v] + length + distance_from_end[u] == minimal_distance
             if cond1 or cond2:
-                minimal_streets.append([index, u, v, length])
-        return minimal_streets
+                self.minimal_edges.append([index, u, v, length])
+        return self.minimal_edges
 
 
     def find_critical_edges(self, start: int, end: int) -> set:
-        critical_streets: list[int] = []
+        if not self.minimal_edges: 
+            self.find_minimal_edges(start, end) # Usado para evitar chamadas duplicadas
         minimal_distance: int = self.get_minimal_distance(start, end)
-        minimal_edges = self.find_minimal_edges(start, end)
-        for index, u, v, length in minimal_edges:
-            # Remover aresta para depois adicionar novamente 
+        critical_streets: list[int] = []
+        for index, u, v, length in self.minimal_edges:
+            # Remover a aresta para depois adicionar novamente
             self.graph[u] = [(w, l) for (w, l) in self.graph[u] if w != v or l != length]
             self.graph[v] = [(w, l) for (w, l) in self.graph[v] if w != u or l != length]
             new_distance: int = self.get_minimal_distance(start, end)
