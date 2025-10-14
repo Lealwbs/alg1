@@ -1,110 +1,106 @@
-
-
-
 class Task:
-    def __init__():
-        pass
+    def __init__(self, start_time: float, end_time: float):
+        self.start: float = start_time
+        self.end: float = end_time 
+
+    def getDuration(self):
+        return self.end - self.start
 
 class Scheduler:
-    def __init__():
-        pass
+    def __init__(self) -> None:
+        self.tasks: dict[int:Task] = dict()
+        self.ids: set[int] = set()
 
-    def add_tasl():
-        pass
+    def __str__(self) -> str:
+        result: str = f"# Scheduler of Tasks object #"
+        for id in self.ids:
+            task: Task = self.tasks[id]
+            result += f"\nTask {id}: {task.start}s - {task.end}s"
+        return result
 
-class scheduler: s
+    def empty(self) -> bool:
+        return self.size == 0
+
+    def size(self) -> int:
+        return len(self.ids)
     
-    pass
-ve o nome no livro
-é padrão a classe ter o msm nome da arquivo
-mesmo um sendo maiusculo e o outro minusculo?
-    
-em cpp nos fazia isso
+    def get_free_id(self, given_id: int) -> int:
+        if given_id not in set and given_id >= 0:
+            return given_id
+        
+        for potential_id in range(self.size() + 1):
+            if potential_id not in self.ids:
+                return potential_id
 
-ai arquivo: minusculo snake case
-class: cameln 
-n seiqual c acha mais bonito
+    def add_task(self, start_time: float, end_time: float, id: int = -1) -> int:
+        task: Task = Task(start_time=start_time, end_time=end_time)
+        if task.getDuration() <= 0:
+            return None
+        
+        id = self.get_free_id(id)
+        self.ids.add(id)
+        self.tasks[id] = task
+        return id
 
-camel case para classe name s cringe snake case para classe name é mais bonito
-cringenake
+    def remove_task(self, id) -> tuple[float, float]:
+        task: Task = self.tasks.pop(id)
+        self.ids.remove(id)
+        return (task.start, task.end)
 
-agendamento de tarefas 
-em 1 palavra só: task_scheduling
-
-# aqui em baixo eu vou digitar todas as ideias para substituir task_scheduling:
-# scheduling
-# task_scheduling
-# job_scheduling
-# job_scheduling
-# task_management
-# task_planning
-
-task 
-
-qual
-
-tasks.py
-
-scheduling.py
-
-backpack = mochila
-graph = grafo
-walking =
-network = rede
-tasks = tarefas
-
-vai ser mó complicado implementar o scheduling usando tasks separado
+    def find_conflict(self, actual_id) -> set[int]:
+        conflict_ids: set[int] = set()
+        actual_task: Task = self.tasks[actual_id]
+        for other_id in self.ids:
+            if actual_id == other_id: continue
+            other_task: Task = self.tasks[other_id]
+            if (other_task.start < actual_task.start < other_task.end ) \
+            or (other_task.start < actual_task.end < other_task.end):
+                conflict_ids.add(other_id)
+        return conflict_ids
+        #     s        e
+        #     #########
+        # #######   ########
+        # s     e   s      e
 
 
-class Task:
-    def __init__():
+    def schedule_tasks(self) -> list[int]:
         pass
+        # Algorithm TaskSchedule(T):
+        # Input: A set T of tasks, such that each task has a start time si and a finish
+        # time fi
+        # Output: 
+        # A nonconflicting schedule of the tasks in T using a minimum number
+        # of machines
+        # m ← 0 // optimal number of machines
+        # while T 	= ∅ do
+        # remove from T the task i with smallest start time si
+        # if there is a machine j with no task conflicting with task i then
+        # schedule task i on machine j
+        # else
+        # m ← m + 1 // add a new machine
+        # schedule task i on machine m
 
 
-class Scheduler:
+if __name__ == "__main__":
+    S: Scheduler = Scheduler()
+
+    S.add_task(3, 5) #0
+    S.add_task(4, 9) #1
+    S.add_task(6, 11) #2
+    S.add_task(10, 13) #3
+    S.add_task(11, 12) #4
+
+    S.add_task(3,4)
+    S.add_task(3, 4.2)
+    S.add_task(4, 4)
+    S.add_task(4, 4.3)
+    S.add_task(4, 9)
+    S.add_task(8, 10)
+    S.add_task(9, 10)
+    S.add_task(9, 9)
 
 
 
-    eu usaria tupla (start, end) para representar o intervalo de tempo de cada tarefa e id? e peso?
+    print(S)
 
-vão ter mais algoritimos mais p frente no ConnectionRefusedError
-
-algoritimos de:
-backpack_algorithm?gulous_alotrithm
-yummy 
-
-
-grafos
-redes
-mochilas
-tarefas
-
-agendamento de tarefas 
-em 1 palavra só: task_scheduling
-
-# aqui em baixo eu vou digitar todas as ideias para substituir task_scheduling:
-# scheduling
-# task_scheduling
-# job_scheduling
-# job_scheduling
-# task_management
-# task_planning
-ex: graph é uma classe de grafos, e todos os metodos são coisas q dá p fazer c o grafo
-grafo = conjunto de vertices
-vertice = classe 
-
-workload = conjunto de tarefas 
-tasks = tarefas, e todos os metodos são coisas q dá p fazer c as tarefas
-
-
-qual
-
-tasks.py
-
-scheduling.py
-
-backpack = mochila
-graph = grafo
-walking =
-network = rede
-tasks = tarefas
+    print(S.find_conflict(1))
