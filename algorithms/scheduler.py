@@ -3,73 +3,54 @@ class Task:
         self.start: int = start_time
         self.end: int = end_time 
 
-
     def getDuration(self) -> int:
         return self.end - self.start
-
 
 
 class Scheduler:
     def __init__(self) -> None:
         self.tasks: dict[int:Task] = dict()
-        self.ids: set[int] = set()
-
+        self.max_id: int = 0
 
     def __str__(self) -> str:
         result: str = f"# Scheduler of Tasks object #"
-        for id in self.ids:
-            task: Task = self.tasks[id]
-            result += f"\nTask {id:>03}: {task.start:>4} to {task.end:<4} ({task.getDuration()}s)"
+        for id in self.tasks:
+            task = self.tasks[id]
+            result += str(f"\nTask {id:>03}: {task.start:>4} to {task.end:<4} ({task.getDuration()}s)")
         return result
 
-
-    def empty(self) -> bool:
-        return self.size == 0
-
-
     def size(self) -> int:
-        return len(self.ids)
-    
-
-    def get_free_id(self, given_id: int) -> int:
-        if given_id not in self.ids and given_id >= 0:
-            return given_id
-        for potential_id in range(self.size() + 1):
-            if potential_id not in self.ids:
-                return potential_id
-
-
+        return len(self.dict)
+            
     def add_task(self, start_time: int, end_time: int, id: int = -1) -> int:
-        task: Task = Task(start_time=start_time, end_time=end_time)
-        if task.getDuration() <= 0:
-            raise Exception("End time is less than or equal the Start time")
-        id = self.get_free_id(id)
-        self.ids.add(id)
-        self.tasks[id] = task
+        if end_time - start_time <= 0:
+            raise Exception(f"The task end time {end_time} is less than or equal the start time {start_time}")
+    
+        if id == -1 or id in self.tasks: 
+            self.max_id += 1
+            id = self.max_id
+
+        self.tasks[id] = Task(start_time=start_time, end_time=end_time)
         return id
 
-
-    def remove_task(self, id) -> tuple[int, int]:
+    def pop_task(self, id) -> tuple[int, int]:
         task: Task = self.tasks.pop(id)
-        self.ids.remove(id)
         return (task.start, task.end)
     
-
     def get_first_ended_task_id(self) -> int:
         earliest_time: int = float('inf')
         earliest_task_id: int = 0
-        for id in self.ids:
+        for id in self.tasks:
             task: Task = self.tasks[id]
             if task.end < earliest_time:
                 earliest_time = task.end
                 earliest_task_id = id
         return earliest_task_id
 
-
     def find_conflict(self, actual_id) -> list[int]:
         conflict_ids: set[int] = set()
         actual_task: Task = self.tasks[actual_id]
-        for other_id in self.ids:
+        for other_id in self.tasks:
             if actual_id == other_id: continue
             other_task: Task = self.tasks[other_id]
             # Condicional para verificar se as tarefas se sobreponhem
@@ -77,22 +58,20 @@ class Scheduler:
                 conflict_ids.add(other_id)
         return sorted(conflict_ids)
     
-
     def get_highest_conflict_task_degree(self) -> tuple[int, int]:
         id_most_conflicted_task: int = 0
         max_degree: int = 1
-        for task_id in self.ids:
+        for task_id in self.tasks:
             conflicts: list[int] = self.find_conflict(task_id) 
             if max_degree < len(conflicts):
                 max_degree = len(conflicts)
                 id_most_conflicted_task = task_id
         return (id_most_conflicted_task, max_degree)
 
-
     def one_machine_task_scheduler(self) -> list[int]:
         schedule: list[int] = list()
         
-        
+        # for task
 
         # A nonconflicting schedule of the tasks in T using a minimum number of machines
         # m ← 0 // optimal number of machines
@@ -130,7 +109,7 @@ if __name__ == "__main__":
 
     print(S)
 
-    for i in S.ids:
+    for i in S.tasks:
         print(f"Conflitos de {i}: {S.find_conflict(i)}")
 
     print(S.get_highest_conflict_task_degree())
