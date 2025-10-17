@@ -1,0 +1,1 @@
+# Algoritimo de Maior subpartição com o maior lucro
