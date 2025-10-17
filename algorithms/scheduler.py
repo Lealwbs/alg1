@@ -1,11 +1,12 @@
 class Task:
-    def __init__(self, start_time: int, end_time: int):
+    def __init__(self, start_time: int, end_time: int, value: int):
         self.start: int = start_time
         self.end: int = end_time 
+        self.value: int = value
 
     def getDuration(self) -> int:
         return self.end - self.start
-
+    
 
 class Scheduler:
     def __init__(self) -> None:
@@ -13,29 +14,32 @@ class Scheduler:
         self.max_id: int = 0
 
     def __str__(self) -> str:
-        result: str = f"# Scheduler of Tasks object #"
+        result: str = f"# TASKS #"
         for id in self.tasks:
             task = self.tasks[id]
-            result += str(f"\nTask {id:>03}: {task.start:>4} to {task.end:<4} ({task.getDuration()}s)")
+            result += str(f"\nTask {id:>03}: {task.start:>4} to {task.end:<4} ({task.getDuration():>2}s) | {task.value}w")
         return result
-
+    
     def size(self) -> int:
         return len(self.dict)
+
+    def is_empty(self) -> bool:
+        return self.size() == 0
             
-    def add_task(self, start_time: int, end_time: int, id: int = -1) -> int:
+    def add_task(self, start_time: int, end_time: int, value: int = 0, id: int = -1) -> int:
         if end_time - start_time <= 0:
-            raise Exception(f"The task end time {end_time} is less than or equal the start time {start_time}")
+            raise Exception(f"The task {id} end time {end_time} is less than or equal the start time {start_time}")
     
         if id == -1 or id in self.tasks: 
             self.max_id += 1
             id = self.max_id
 
-        self.tasks[id] = Task(start_time=start_time, end_time=end_time)
+        self.tasks[id] = Task(start_time=start_time, end_time=end_time, value=value)
         return id
 
     def pop_task(self, id) -> tuple[int, int]:
         task: Task = self.tasks.pop(id)
-        return (task.start, task.end)
+        return (task.start, task.end, task.value)
     
     def get_first_ended_task_id(self) -> int:
         earliest_time: int = float('inf')
@@ -89,6 +93,9 @@ class Scheduler:
 
         notscheduled_tasks_ids = []
 
+    def one_machine_task_scheduler_by_weigth(self):
+        pass
+
 
 
 if __name__ == "__main__":
@@ -105,7 +112,7 @@ if __name__ == "__main__":
     S.add_task(40, 43) #7
     S.add_task(40, 90) #8
     S.add_task(80, 100) #9
-    S.add_task(90, 100, 150) #10
+    S.add_task(90, 100, id=150) #10
 
     print(S)
 
