@@ -1,68 +1,63 @@
 class Vertex:
-    pass
+    def __init__(self):
+        self.adjacents: list[(int, int)] = []  # (vertex, weight)
+
+
+class Edge:
+    def __init__(self, vertex_a: int, vertex_b: int, weight: int = 0):
+        self.vertex_a = vertex_a
+        self.vertex_b = vertex_b
+        self.weight = weight
+
 
 class Graph:
-    pass
+    def __init__(self, directed_graph: bool = True, weighted_graph: bool = True):
+        self.digraph: bool = directed_graph
+        self.weighted: bool = weighted_graph
+        self.vertices_count: int = 0
+        self.edges_count: int = 0
+        self.vertices: dict[Vertex] = {}
+        self.edges: dict[Edge] = {}
+        pass
 
+    def __str__(self):
+        pass
 
-qual nome eu coloco nesse aruqivos?
+    def add_edge(self):
+        pass
 
-aula02-caminhamento-grafos.pdfaula02-caminhamento-grafos.pdf
-aula03-aplicacoes-caminhamento-part1.pdfaula03-aplicacoes-caminhamento-part1.pdf
-aula04-aplicacoes-caminhamento-part2.pdfaula04-aplicacoes-caminhamento-part2.pdf
-aula05-mst-prim.pdfaula05-mst-prim.pdf
-aula06-mst-kruskal.pdfaula06-mst-kruskal.pdf
-aula07-caminho-mais-curtos-grafos.pdfaula07-caminho-mais-curtos-grafos.pdf
-aula08-fluxo-redes-intro.pdfaula08-fluxo-redes-intro.pdf
-aula09-fluxo-redes-parte2.pdfaula09-fluxo-redes-parte2.pdf
-aula10-paradigma-guloso.pdfaula10-paradigma-guloso.pdf
-aula11-estratégia-gulosa-part2.pdfaula11-estratégia-gulosa-part2.pdf
+    def pop_edge(self):
+        pass
 
-conteudo: grafos
+    def dfs(self):
+        pass
 
-graph
+    def bfs(self):
+        pass
 
-dfs 
+    def color_graph(self):
+        pass
 
-bfs 
+    def kosarajur_sharir(self):
+        pass
 
-colorir_grafo
+    def prim(self):
+        pass
 
-kosarajur_sharir
+    def kruskal(self):
+        pass
 
-prim
+    def dijkstra(self):
+        pass
 
-kruskal
+    def bellman_ford(self):
+        pass
 
-dijkstra
+    def ford_fulkerson(self):
+        pass
 
-bellman_ford
+    def capacity_scaling(self):
+        pass
 
-capacity e o edmonds_karp
-
-fim
-
-class Network: inheritance from graph
-    pass
-
-ford_fulkerson
-
-capacity_scaling
-
-
-
-e se eu deixar tudo sobre grafos na classe de grafos?
-eu to fazendo isso
-
-
-eu separo em grafo direcionado e grafo n direcionado?
-
-tipo de direcionamento:
-
-none = bidirecionado
-false = bidirecionado = nao_direcionado
-Union(none, directionado, bidirecionado)
-true or false 
-ce vai fazer calsse vertice?
-vo
-entao deixa a classe só com scheduling.py
+    def edmonds_karp(self):
+        pass
