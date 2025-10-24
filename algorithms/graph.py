@@ -2,7 +2,7 @@ class Node:
     def __init__(self, id: int) -> None:
         self.adjacents: list[(int, int)] = []  # (vertex, weight)
         self.id: int = id
-
+        # self.data: None = Any Information
 
     def __str__(self) -> str:
         return f"NODE {self.id}: {self.adjacents}"
@@ -15,6 +15,10 @@ class Edge:
         self.node_b = node_b
         self.weight = weight
         self.id = id
+        # self.data: None = Any Information
+    
+    def __str__(self) -> str:
+        return f"EDGE {self.id}: {self.node_a} --({self.weight}w)-- {self.node_b}"
 
 
 
@@ -31,7 +35,7 @@ class Graph:
     def __str__(self) -> str:
         result = f"GRAPH ({self.nodes_count} NODES and {self.edges_count} EDGES):\n\n"
         arrow: str = self.digraph * ">"
-        result += f"EDGE ID: Node From --(Edge Weight)--{arrow} Node To\n"
+        result += f"EDGE ID: From --(Weight)--{arrow} To\n"
         for index, edge in self.edges.items():
             result += f"EDGE {index}: {edge.node_a} --({edge.weight}w)--{arrow} {edge.node_b}\n"
 
@@ -47,6 +51,14 @@ class Graph:
         for potential_id in range(self.edges_count+1):
             if potential_id not in self.edges:
                 return potential_id
+            
+    
+    def get_free_node_id(self, candidate_id: int = -1) -> int:
+        if candidate_id != -1 and candidate_id not in self.nodes: 
+            return candidate_id
+        for potential_id in range(self.nodes_count+1):
+            if potential_id not in self.nodes:
+                return potential_id        
 
 
     def add_edge(self, node_from: int, node_to: int, weight: int = 0, id = -1) -> int:
@@ -58,13 +70,11 @@ class Graph:
         self.edges_count += 1
 
         if node_from not in self.nodes:
-            tmp_node: Node = Node(node_from)
-            self.nodes[node_from] = tmp_node
+            self.nodes[node_from] = Node(node_from)
             self.nodes_count += 1
 
         if node_to not in self.nodes:
-            tmp_node: Node = Node(node_to)
-            self.nodes[node_to] = tmp_node
+            self.nodes[node_to] = Node(node_to)
             self.nodes_count += 1
 
         self.nodes[node_from].adjacents.append((node_to, weight))
@@ -74,23 +84,44 @@ class Graph:
         return free_edge_id
         
 
-    def add_node(self):
-        pass
+    def add_node(self, id: int) -> int:
+        free_node_id: int = self.get_free_node_id(candidate_id = id)
+        self.nodes[free_node_id] = Node(free_node_id)
+        self.nodes_count += 1
+        return free_node_id
 
 
-    def pop_edge(self, id: int):
-        pass
+    def pop_edge(self, id: int) -> Edge:
+        if id not in self.edges:
+            return None
+        
+        edge: Edge = self.edges.pop(id)
+
+        node_a: Node = self.nodes[edge.node_a]
+        node_b: Node = self.nodes[edge.node_b]
+
+        node_a.adjacents.remove((edge.node_b, edge.weight))
+        node_b.adjacents.remove((edge.node_a, edge.weight))
+
+        return edge
     
 
-    def pop_node(self, id: int):
-        pass
+    def pop_node(self, id: int) -> Node:
+        if id not in self.nodes:
+            return None
+        
+        node: Node = self.nodes.pop(id)
+
+        return node
 
 
     def dfs(self):
+        # stack
         pass
 
 
     def bfs(self):
+        # queue
         pass
 
 
@@ -134,6 +165,7 @@ class Graph:
 if __name__ == "__main__":
     G: Graph = Graph()
 
+    G.add_edge(6, 5, weight = 5, id = 2)
     G.add_edge(0, 1)
     G.add_edge(0, 2)
     G.add_edge(0, 3)
@@ -142,4 +174,13 @@ if __name__ == "__main__":
     G.add_edge(3, 4)
     G.add_edge(4, 5)
 
+    G.add_node(7)
+    G.add_node(8)
+    G.add_node(9)
+
+    print(G.pop_edge(2))
+    print(G.pop_node(4))
     print(G)
+    # print(G)
+
+    
