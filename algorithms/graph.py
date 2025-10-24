@@ -1,12 +1,12 @@
 class Node:
     def __init__(self, id: int) -> None:
-        self.adjacents: list[(int, int)] = []  # (vertex, weight)
+        self.adjacents: dict[int: int] = {} # {vertex: weight}
         self.id: int = id
         # self.data: None = Any Information
 
     def __str__(self) -> str:
         return f"NODE {self.id}: {self.adjacents}"
-
+    
 
 
 class Edge:
@@ -26,8 +26,8 @@ class Graph:
     def __init__(self, directed_graph: bool = False, weighted_edges: bool = False):
         self.digraph: bool = directed_graph
         self.weighted: bool = weighted_edges
-        self.nodes: dict[Node] = {}
-        self.edges: dict[Edge] = {}
+        self.nodes: dict[int: Node] = {}  # {id: node}
+        self.edges: dict[int: Edge] = {}  # {id: edge}
         self.nodes_count: int = 0
         self.edges_count: int = 0
 
@@ -77,9 +77,9 @@ class Graph:
             self.nodes[node_to] = Node(node_to)
             self.nodes_count += 1
 
-        self.nodes[node_from].adjacents.append((node_to, weight))
+        self.nodes[node_from].adjacents[node_to] = weight
         if not self.digraph: 
-            self.nodes[node_to].adjacents.append((node_from, weight))
+            self.nodes[node_to].adjacents[node_from] = weight
 
         return free_edge_id
         
@@ -100,8 +100,8 @@ class Graph:
         node_a: Node = self.nodes[edge.node_a]
         node_b: Node = self.nodes[edge.node_b]
 
-        node_a.adjacents.remove((edge.node_b, edge.weight))
-        node_b.adjacents.remove((edge.node_a, edge.weight))
+        node_a.adjacents.pop(edge.node_b)
+        node_b.adjacents.pop(edge.node_a)
 
         return edge
     
@@ -111,6 +111,15 @@ class Graph:
             return None
         
         node: Node = self.nodes.pop(id)
+
+        for edge in self.edges:
+            #if edge.node_a == id:
+            #    self.pop_edge
+            pass
+
+        for tmp_id in self.nodes:
+            #tmp_node: Node = self.nodes[tmp_id]
+            pass
 
         return node
 
