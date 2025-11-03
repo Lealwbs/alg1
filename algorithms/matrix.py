@@ -45,5 +45,8 @@ class Matrix:
     # raise NotImplementedError
 
 
+# Algoritmo de Strassen
+# multiplicar matrix
+
 if __name__ == "__main__":
     a: Matrix = Matrix(3, 3) 
