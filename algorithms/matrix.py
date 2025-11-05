@@ -163,5 +163,8 @@ class Matrix:
 # .__enter__()	Sets up the runtime context, acquires resources, and may return an object that you can bind to a variable with the as specifier on the with header
 # .__exit__()	Cleans up the runtime context, releases resources, handles exceptions, and returns a Boolean value indicating whether to propagate any exceptions that may occur in the context
 
+# Algoritmo de Strassen
+# multiplicar matrix
+
 if __name__ == "__main__":
     a: Matrix = Matrix(3, 3) 
