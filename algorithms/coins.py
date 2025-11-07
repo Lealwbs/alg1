@@ -1,9 +1,35 @@
+class Change:
+    def __init__(self, coins: list[int] | dict[int:int]) -> None:
+        self.coins: dict[int:int] = {}
+        self.coins_amount: int = 0
+        self.total_value: int = 0
+        
+        if type(coins) == dict: self.coins = dict(sorted(coins.items(), reverse = True))
+        if type(coins) == list: self.coins = dict.fromkeys(sorted(coins, reverse = True), 0)
+
+        for coin in self.coins:
+            self.coins_amount += self.coins[coin]
+            self.total_value += self.coins[coin] * coin
+
+    def __str__(self) -> str:
+        return f"Change({self.coins_amount} coins | {self.total_value}$): {self.coins}"
+    
+    def __add__(self, other: 'Change') -> 'Change':
+        result: Change = Change([]) 
+        for coin in self.coins:
+            result.coins[coin] = self.coins[coin]
+
+        for coin in other.coins:
+            if coin in result.coins: result.coins[coin] += other.coins[coin]
+            else: result.coins[coin] = other.coins[coin]
+        
+        return result
+
+
+
 class Cashier:
-    def __init__(self, coins: list[int] | dict[int:int] ) -> None:
-        if type(coins) == list:
-            self.avaliable_coins: dict[int:int] = dict.fromkeys(sorted(coins, reverse = True), float('inf'))
-            return
-        self.avaliable_coins: dict[int:int] = dict(sorted(coins.items(), reverse = True))
+    def __init__(self, avaliable_change: Change, fixed_amount = -1) -> None:
+        self.avaliable_change: Change = avaliable_change
 
     def __str__(self) -> str:
         return f"Cashier({self.avaliable_coins})"
@@ -79,6 +105,11 @@ if __name__ == "__main__":
     # print(C)
     # print(C._get_zero_coins())
     # print(C.change_quantity_coins(200))
-    print(C.get_change_greedy(200))
-    print(C.get_change_value_possible(200), "/", 200)
-    print(C.get_change_quantity_coins(200))
+    # print(C.get_change_greedy(200))
+    # print(C.get_change_value_possible(200), "/", 200)
+    # print(C.get_change_quantity_coins(200))
+
+    X: Change = Change(my_coins)
+
+    print(X)
+    print(X + X)
