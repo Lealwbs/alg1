@@ -13,6 +13,7 @@ class Test:
     def __init__(self, title: str = "PY_UNIT_ASSERT REPORT") -> None:
         self.results: list[dict] = []
         self.start_time: float = time.time()
+        self.last_time: float = self.start_time
         self.tests_amount: int = 0
         self.tests_passed: int = 0
         print(self.header(title))
@@ -26,7 +27,7 @@ class Test:
             f"========================================\n"\
             f"#{WHITE}{title:^38}{CYAN}#\n"\
             f"========================================{RESET}\n\n"\
-            f"{BOLD}{GREY}{'ID':<5}{'STATUS':<9}{'DURATION':<11}{'DETAILS'}{RESET}\n"\
+            f"{BOLD}{GREY}{'ID':<5}{'STATUS':<9}{'DURATION':>7}{'DETAILS':>10}{RESET}\n"\
             f"{GREY}{'-'*40}{RESET}"
 
 
@@ -42,7 +43,7 @@ class Test:
         print(f"{BOLD}{ORANGE}\n{failed_tests} test(s) failed out of {self.tests_amount}:{RESET}")
         for result in self.results:
             if not result['passed']: 
-                print(f"\n{BOLD}Test {result['id']}: {GREY}{result['message']}\n {RESET}{result['error']}")
+                print(f"\n{BOLD}{GREY}Test {result['id']}: {RESET}{GREY}{result['message']}\n {RESET}{result['error']}")
         
     def error_text(self, exp: str, act: str) -> str:
         return f"{BOLD}{GREEN}EXP:{RESET} {exp}\n"\
@@ -50,44 +51,46 @@ class Test:
 
     def assert_equals(self, exp, act, msg: str = "") -> None:
         self.tests_amount += 1
-        test_id = self.tests_amount
-        start_time: float = time.time()
+        current_time = time.time()
+        duration = current_time - self.last_time
+        self.last_time = current_time
 
         try:
             assert exp == act, self.error_text(exp, act)
-            duration = time.time() - start_time
             status = f"{GREEN}PASSED{RESET}"
             self.tests_passed += 1
             self.results.append({
-                "id": test_id,
+                "id": self.tests_amount,
                 "passed": True,
                 "message": msg or "OK",
                 "error": None,
                 "duration": duration
             })
         except AssertionError as e:
-            duration = time.time() - start_time
             status = f"{RED}FAILED{RESET}"
             self.results.append({
-                "id": test_id,
+                "id": self.tests_amount,
                 "passed": False,
                 "message": msg,
                 "error": str(e),
                 "duration": duration
             })
 
-        print(f"{GREY}#{test_id:<3}{RESET} {status:<10} "
-              f"{duration:>9.5f}s   {msg or ''}")
+        print(f"{GREY}#{self.tests_amount:<3}{RESET} {status:<10} "
+              f"{duration*1000:>8.0f}ms   {msg or ''}")
 
 
 
 
 if __name__ == "__main__":
     R = Test()
+    time.sleep(1)
 
-    R.assert_equals(time.sleep(1), "Hello, World!", "opa")
+    R.assert_equals(time.sleep(0.012), "Hello, World!", "opa")
+    time.sleep(1)
     R.assert_equals("Foo", "Foao", "Testing string mismatch")
     R.assert_equals(123, 123, "Numeric equality")
     R.assert_equals("opa", "opa", "Another greeting")
-    R.assert_equals('123', 123, "Str equality")
+    R.assert_equals(time.sleep(0.504), 123, "Str equality")
     R.assert_equals("test", "test1", "Final test")
+    time.sleep(1)
