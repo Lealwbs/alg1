@@ -12,6 +12,8 @@ class Primes:
                 return False
         return True
 
+    def are_relatively_prime(self, number_1: int, number_2: int) -> bool:
+        pass
 
 if __name__ == "__main__":
     P: Primes = Primes()
