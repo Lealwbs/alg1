@@ -1,6 +1,6 @@
 class Builder:
-    def __init__(self, blocks: list[int]) -> None:
-        self.stacks: list[int] = blocks
+    def __init__(self, stacks: list[int]) -> None:
+        self.stacks: list[int] = stacks
         self.left: list[int] = [0 for _ in self.stacks]
         self.right: list[int] = [0 for _ in self.stacks]
         self.height: list[int] = [0 for _ in self.stacks]
