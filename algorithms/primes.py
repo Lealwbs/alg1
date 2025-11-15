@@ -13,13 +13,17 @@ class Primes:
         return True
 
     def are_relatively_prime(self, a: int, b: int) -> bool:
-        if a == 1 or b == 1: return False
+        if a <= 1 or b <= 1: return True
+        if a-b == 0: return True
         v1: int = max(a, b) - min(a, b)
         v2: int = min(a, b)
-        return self.are_relatively_prime(self, v1, v2)
+        return self.are_relatively_prime(v1, v2)
 
 if __name__ == "__main__":
     P: Primes = Primes()
 
+    # for i in range(0, 21):
+    #     print(f"{i} is {"not " * (not P.is_prime(i))}prime")
+
     for i in range(0, 21):
-        print(f"{i} is {"not " * (not P.is_prime(i))}prime")
+        print(i, P.are_relatively_prime(4, i))
