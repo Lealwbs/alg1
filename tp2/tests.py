@@ -99,4 +99,4 @@ if __name__ == "__main__":
         with open(out_file, "r") as f:
             expected = f.read()
         
-        T.assert_equals(expected, actual, f"Test {i:02}")
+        T.assert_equals(expected, actual, f"Out{i:02}.txt")
