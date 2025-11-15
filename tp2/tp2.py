@@ -43,7 +43,7 @@ def main(argv=sys.argv) -> str:
     result_points: str = " ".join(map(str, minimal_perimeter_points))
 
     result = f"Parte 1: {max_triangle_height}\n"
-    result += f"Parte 2: {minimal_perimeter_value:.4f} + {result_points}\n"
+    result += f"Parte 2: {minimal_perimeter_value:.4f} {result_points}\n"
     
     return result 
 

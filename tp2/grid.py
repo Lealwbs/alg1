@@ -63,7 +63,7 @@ class Grid:
     def sort_points(self) -> None:
         self.px = sorted(self.points.keys(), key=lambda index: self.points[index].x)
         self.py = sorted(self.points.keys(), key=lambda index: self.points[index].y)
-    
+
     def get_minimal_perimeter_points(self) -> tuple:
         self.sort_points()
         return self.divide_conquer(self.px, self.py)
@@ -75,22 +75,24 @@ class Grid:
         if n <= 10:
             return self.brute_force_triplet(px_range)
         
-        # Dividir ao meio e montar os parâmetros para a recursão
-        mid_index: int = n // 2
-        mid_point_id: int = px_range[mid_index]
-        mid_x: float = self.points[mid_point_id].x
+        # Dividir
+        mid_index = n // 2
+        mid_point_id = px_range[mid_index]
+        mid_x = self.points[mid_point_id].x
         
         px_left = px_range[:mid_index]
         px_right = px_range[mid_index:]
+        
         py_left = [idx for idx in py_range if self.points[idx].x <= mid_x]
         py_right = [idx for idx in py_range if self.points[idx].x > mid_x]
-
-        triplet_left: tuple[int, int, int] = self.divide_conquer(px_left, py_left)
-        triplet_right: tuple[int, int, int] = self.divide_conquer(px_right, py_right)
+        
+        # Conquistar
+        triplet_left = self.divide_conquer(px_left, py_left)
+        triplet_right = self.divide_conquer(px_right, py_right)
         
         # Escolher o melhor dos dois lados
-        perim_left: float = self.perimeter(*triplet_left)
-        perim_right: float = self.perimeter(*triplet_right)
+        perim_left = self.perimeter(*triplet_left)
+        perim_right = self.perimeter(*triplet_right)
         
         # Define qual tripla é melhor considerando empates (usa ordem lexicográfica)
         if perim_left < perim_right:
@@ -103,7 +105,7 @@ class Grid:
             best_triplet = self.min_lexically(triplet_left, triplet_right)
             best_perimeter = perim_left
         
-        # Combina, verifica triângulos que cruzam a linha divisória (podem ser menores)
+        # Combinar: crucial! Verifica triângulos que cruzam a linha divisória (podem ser menores)
         # A faixa considera apenas pontos próximos à linha divisória (distância < melhor perímetro)
         strip = [idx for idx in py_range if abs(self.points[idx].x - mid_x) < best_perimeter]
         strip_triplet = self.find_strip_triplet(strip, best_perimeter)
@@ -119,11 +121,11 @@ class Grid:
     
     def brute_force_triplet(self, point_ids: list) -> tuple:
         n = len(point_ids)
+        if n < 3:
+            return (0, 0, 0)
+        
         min_perim = float('inf')
         best_triplet = (0, 0, 0)
-
-        if n < 3: 
-            return best_triplet
         
         for i in range(n):
             for j in range(i + 1, n):
@@ -149,6 +151,7 @@ class Grid:
         best_triplet = None
         
         # Verifica apenas pontos próximos na faixa (strip já está ordenado por Y)
+        # A otimização geométrica garante que só precisamos verificar poucos pontos à frente
         for i in range(n):
             j = i + 1
             # Para cada ponto i, verifica pontos j próximos em Y (dentro do perímetro mínimo)
