@@ -16,6 +16,12 @@ def compare_lexically_tuples(tuple_a) -> tuple:
 class Grid:
     def __init__(self) -> None:
         self.points: dict[int:Point] = {}
+
+    def __str__(self) -> str:
+        result: str = f"Grid ({len(self.points)} points):\n"
+        for point in self.points.values():
+            result += f"{point}\n"
+        return result
         
     def add_point(self, index, coord_x, coord_y) -> None:
         self.points[index] = Point(index, coord_x, coord_y)
@@ -27,16 +33,14 @@ class Grid:
     
     def get_minimal_perimeter_points(self) -> tuple:
         # compare_lexically_tuples()
-        return (3, 4, 5)
+        return (1, 2, 3)
+    
 
-    def get_minimal_perimeter(self) -> float:
-        ids: tuple[int, int, int] = self.get_minimal_perimeter_points()
-        point_A: Point = self.points[ids[0]] 
-        point_B: Point = self.points[ids[1]] 
-        point_C: Point = self.points[ids[2]] 
-        # point_A = Point(997, 0, 0)
-        # point_B = Point(998, 3, 0)
-        # point_C = Point(999, 0, 4)
+
+    def get_perimeter(self, id_a, id_b, id_c) -> float:
+        point_A: Point = self.points[id_a] 
+        point_B: Point = self.points[id_b] 
+        point_C: Point = self.points[id_c] 
         return self.distance(point_A, point_B) + self.distance(point_B, point_C) + self.distance(point_C, point_A)
     
 # Divisão e Conquista

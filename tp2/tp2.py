@@ -38,11 +38,13 @@ def main(argv=sys.argv) -> str:
 
     # Chamadas das funções que resolvem o problema
     max_triangle_height: int = wall.get_maximal_height()
-    triangle_perimeter: float = park.get_minimal_perimeter()
-    perimeter_coordinate_index: str = " " #.join(str(coord) for coord in perimeter_coords)
+    minimal_perimeter_points: tuple[int, int, int] = park.get_minimal_perimeter_points()
+    minimal_perimeter_value: float = park.get_perimeter(*minimal_perimeter_points)
 
     result = f"Parte 1: {max_triangle_height}\n"
-    result += f"Parte 2: {triangle_perimeter:.4f} {perimeter_coordinate_index}"
+    result += f"Parte 2: {minimal_perimeter_value:.4f} {minimal_perimeter_points}"
+
+    print(park)
     
     return result  # Parte 2: P A1 A2 A3  (P: com exatamente quatro casas decimais, indices, ordem crescente, lexicograficamente menor)
 
