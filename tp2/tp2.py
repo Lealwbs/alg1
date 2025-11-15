@@ -42,7 +42,7 @@ def main(argv=sys.argv) -> str:
     minimal_perimeter_value: float = park.get_perimeter(*minimal_perimeter_points)
 
     result = f"Parte 1: {max_triangle_height}\n"
-    result += f"Parte 2: {minimal_perimeter_value:.4f} {minimal_perimeter_points}"
+    result += f"Parte 2: {minimal_perimeter_value:.4f} {" ".join(map(str, minimal_perimeter_points))}\n"
 
     #print(park)
     

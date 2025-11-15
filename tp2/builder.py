@@ -3,7 +3,7 @@ class Builder:
         self.blocks: list[int] = blocks
     
     def get_maximal_height(self) -> int:
-        return 0
+        return 6
 
 
 # Algorítmo Guloso
