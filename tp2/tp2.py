@@ -39,7 +39,7 @@ def main(argv=sys.argv) -> str:
     # Chamadas das funções que resolvem o problema
     max_triangle_height: int = wall.get_maximal_height()
     minimal_perimeter_points: tuple[int, int, int] = park.get_minimal_perimeter_points()
-    minimal_perimeter_value: float = park.get_perimeter(*minimal_perimeter_points)
+    minimal_perimeter_value: float = park.perimeter(*minimal_perimeter_points)
 
     result = f"Parte 1: {max_triangle_height}\n"
     result += f"Parte 2: {minimal_perimeter_value:.4f} {" ".join(map(str, minimal_perimeter_points))}\n"
