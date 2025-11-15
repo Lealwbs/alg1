@@ -40,9 +40,10 @@ def main(argv=sys.argv) -> str:
     max_triangle_height: int = wall.get_maximal_height()
     minimal_perimeter_points: tuple[int, int, int] = park.get_minimal_perimeter_points()
     minimal_perimeter_value: float = park.perimeter(*minimal_perimeter_points)
+    result_points: str = " ".join(map(str, minimal_perimeter_points))
 
     result = f"Parte 1: {max_triangle_height}\n"
-    result += f"Parte 2: {minimal_perimeter_value:.4f} {" ".join(map(str, minimal_perimeter_points))}\n"
+    result += f"Parte 2: {minimal_perimeter_value:.4f} + {result_points}\n"
     
     return result 
 
@@ -51,7 +52,3 @@ if __name__ == "__main__":
     # A saída só é impressa no VPL. Nos testes locais (tests.py), o return result é usado para comparação
     output: str = main()
     print(output) 
-
-    
-
-

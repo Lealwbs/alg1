@@ -1,5 +1,5 @@
 class Builder:
-    def __init__(self, stacks: list[int]) -> None:
+    def __init__(self, stacks: list) -> None:
         self.stacks: list[int] = stacks
         self.left: list[int] = [0 for _ in self.stacks]
         self.right: list[int] = [0 for _ in self.stacks]

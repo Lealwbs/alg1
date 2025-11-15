@@ -26,7 +26,7 @@ class Grid:
         return result
 
     # Printa os pontos de um dicionário ou lista para debug
-    def print_points(self, struct: dict | list ) -> None:
+    def print_points(self, struct) -> None:
         result: str = ""
         if type(struct) == dict: 
             for i in struct:
@@ -42,7 +42,7 @@ class Grid:
     def add_point(self, index, coord_x, coord_y) -> None:
         self.points[index] = Point(index, coord_x, coord_y)
 
-    def min_lexically(self, tuple_a: tuple[int, int, int], tuple_b: tuple[int, int, int]) -> tuple:
+    def min_lexically(self, tuple_a: tuple, tuple_b: tuple) -> tuple:
         for i in range(3):
             if tuple_a[i] < tuple_b[i]: return tuple_a
             if tuple_a[i] > tuple_b[i]: return tuple_b
@@ -53,7 +53,7 @@ class Grid:
         partial_y: float = pow(point_a.y - point_b.y, 2)
         return sqrt(partial_x + partial_y)
     
-    def perimeter(self, id_a, id_b, id_c) -> float:
+    def perimeter(self, id_a: int, id_b: int, id_c: int) -> float:
         if not (id_a or id_b or id_c): return 0
         point_A: Point = self.points[id_a] 
         point_B: Point = self.points[id_b] 
@@ -68,7 +68,7 @@ class Grid:
         self.sort_points()
         return self.divide_conquer(self.px, self.py)
     
-    def divide_conquer(self, px_range: list[int], py_range: list[int]) -> tuple:
+    def divide_conquer(self, px_range: list, py_range: list) -> tuple:
         n = len(px_range)
         
         # Caso base: força bruta para poucos pontos
@@ -117,7 +117,7 @@ class Grid:
         
         return best_triplet
     
-    def brute_force_triplet(self, point_ids: list[int]) -> tuple:
+    def brute_force_triplet(self, point_ids: list) -> tuple:
         n = len(point_ids)
         min_perim = float('inf')
         best_triplet = (0, 0, 0)
@@ -140,7 +140,7 @@ class Grid:
         
         return best_triplet
     
-    def find_strip_triplet(self, strip: list[int], current_min: float) -> tuple:
+    def find_strip_triplet(self, strip: list, current_min: float) -> tuple:
         n = len(strip)
         if n < 3:
             return None
