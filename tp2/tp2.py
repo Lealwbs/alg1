@@ -44,7 +44,7 @@ def main(argv=sys.argv) -> str:
     result = f"Parte 1: {max_triangle_height}\n"
     result += f"Parte 2: {minimal_perimeter_value:.4f} {minimal_perimeter_points}"
 
-    print(park)
+    #print(park)
     
     return result  # Parte 2: P A1 A2 A3  (P: com exatamente quatro casas decimais, indices, ordem crescente, lexicograficamente menor)
 
