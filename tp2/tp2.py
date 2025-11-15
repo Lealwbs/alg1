@@ -24,7 +24,7 @@ def main(argv=sys.argv) -> str:
         raise ValueError("Please provide an input file (argument or stdin).")
 
     # O tamanho do vetor de pilhas e nem a quantidade de árvores (linhas 0 e 1) não são necessárias aqui.
-    stack_list: list[int] = lines[1].strip().split()
+    stack_list: list[int] = list(map(int, lines[1].strip().split()))
     wall: Builder = Builder(stack_list)
     park: Grid = Grid()
 
@@ -43,16 +43,15 @@ def main(argv=sys.argv) -> str:
 
     result = f"Parte 1: {max_triangle_height}\n"
     result += f"Parte 2: {minimal_perimeter_value:.4f} {" ".join(map(str, minimal_perimeter_points))}\n"
-
-    #print(park)
     
-    return result  # Parte 2: P A1 A2 A3  (P: com exatamente quatro casas decimais, indices, ordem crescente, lexicograficamente menor)
+    return result 
 
 
 if __name__ == "__main__":
     # A saída só é impressa no VPL. Nos testes locais (tests.py), o return result é usado para comparação
     output: str = main()
     print(output) 
+
     
 
 
