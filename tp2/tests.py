@@ -90,7 +90,7 @@ if __name__ == "__main__":
     tests_path_out = ".\\tests\\out_moodle\\"
 
     tests = [(i, f"{tests_path_inp}in{i:02}.txt", f"{tests_path_out}out{i:02}.txt")
-        for i in [1, 2] + list(range(11, 21))]
+        for i in range(1, 21)]
 
     T = TP2Test()
 
