@@ -11,8 +11,8 @@ def get_filepath(filename: str) -> str:
     raise FileNotFoundError(f"File not found in any location: {filename}")
 
 
+# Adaptação para ler tanto do arquivo (argumento) quanto do stdin (no vpl)
 def get_lines(argv: str) -> list[str]:
-    # Adaptação para ler tanto do arquivo (argumento) quanto do stdin (no vpl)
     if len(argv) > 1: 
         filepath = get_filepath(argv[1]) 
         with open(filepath, "r") as file:
@@ -24,31 +24,28 @@ def get_lines(argv: str) -> list[str]:
 
 def main(argv=sys.argv) -> str:
     lines = get_lines(argv)
-    S: Solver = Solver()
+
+    header: list[str] = lines[0].strip().split() # N e M
+    elf_number: int = int(header[0])
+    elf_conflict: int = int(header[1]) # Desnecessário aqui
+
+    S: Solver = Solver(elf_number)
+
+    # Lê as linhas da entrada, e adiciona os conflitos entre elfos no resolvedor
+    for line in lines[2:]: 
+        data: list[float] = line.strip().split()
+        if not data: 
+            continue
+        elf_a, elf_b = float(data[0]), float(data[1])
+        S.add_conflict(elf_a, elf_b)
+
+    # Chamada da funçõe que resolve o problema
+    elfs_list: list[int] = [1, 2, 3] # S.get_solution()
+
+    elfs_result: str = str(len(elfs_list))
+    elfs_result += "\n" + " ".join(str(elf) for elf in elfs_list)
     
-    # # O tamanho do vetor de pilhas e nem a quantidade de árvores (linhas 0 e 1) não são necessárias aqui.
-    # stack_list: list[int] = list(map(int, lines[1].strip().split()))
-    # wall: Builder = Builder(stack_list)
-    # park: Grid = Grid()
-
-    # # Lê as linhas da entrada, e adiciona as coordenadas (com o indice) no Grid.
-    # for index, line in enumerate(lines[3:], start=1): 
-    #     data: list[float] = line.strip().split()
-    #     if not data: 
-    #         continue
-    #     coord_x, coord_y = float(data[0]), float(data[1])
-    #     park.add_point(index, coord_x, coord_y)
-
-    # # Chamadas das funções que resolvem o problema
-    # max_triangle_height: int = wall.get_maximal_height()
-    # minimal_perimeter_points: tuple[int, int, int] = park.get_minimal_perimeter_points()
-    # minimal_perimeter_value: float = park.perimeter(*minimal_perimeter_points)
-    # result_points: str = " ".join(map(str, minimal_perimeter_points))
-
-    # result = f"Parte 1: {max_triangle_height}\n"
-    # result += f"Parte 2: {minimal_perimeter_value:.4f} {result_points}\n"
-    
-    return "" #result 
+    return elfs_result
 
 
 if __name__ == "__main__":

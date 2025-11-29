@@ -52,7 +52,7 @@ class TP3Test:
         
     def error_text(self, exp: str, act: str) -> str:
         return f"{BOLD}{GREEN}EXP:{RESET}\n{exp}\n"\
-               f"{BOLD}{RED}ACT:{RESET}\n{act}"
+               f"{BOLD}{RED}ACT:{RESET}\n{act}\n"
 
     def assert_equals(self, exp, act, msg: str = "") -> None:
         self.tests_amount += 1
