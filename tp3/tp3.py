@@ -40,7 +40,7 @@ def main(argv=sys.argv) -> str:
         S.add_conflict(elf_a, elf_b)
 
     # Chamada da funçõe que resolve o problema
-    elfs_list: list[int] = [1, 2, 3] # S.get_solution()
+    elfs_list: list[int] = S.get_solution()
 
     elfs_result: str = str(len(elfs_list))
     elfs_result += "\n" + " ".join(str(elf) for elf in elfs_list)
