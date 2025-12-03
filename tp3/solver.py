@@ -17,14 +17,14 @@ class Solver:
             a, b = b, a
         return (a, b) in self.conflicts
 
-    def is_valid_subset(self, subset: list[int]) -> bool:
+    def is_valid_subset(self, subset: list) -> bool:
         for i in range(len(subset)):
             for j in range(i + 1, len(subset)):
                 if self.has_conflict(subset[i], subset[j]):
                     return False
         return True
 
-    def generate_all_valid_subsets(self, group: list[int]) -> list[list[int]]:
+    def generate_all_valid_subsets(self, group: list) -> list:
         result: list[list[int]] = []
         n = len(group)
         
@@ -36,14 +36,14 @@ class Solver:
         
         return result
 
-    def can_combine(self, subset_a: list[int], subset_b: list[int]) -> bool:
+    def can_combine(self, subset_a: list, subset_b: list) -> bool:
         for a in subset_a:
             for b in subset_b:
                 if self.has_conflict(a, b):
                     return False
         return True
 
-    def get_solution(self) -> list[int]:
+    def get_solution(self) -> list:
         # Divide em dois grupos
         mid = self.n // 2
         group_a = list(range(mid))
