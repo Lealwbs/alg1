@@ -32,11 +32,11 @@ def main(argv=sys.argv) -> str:
     S: Solver = Solver(elf_number)
 
     # Lê as linhas da entrada, e adiciona os conflitos entre elfos no resolvedor
-    for line in lines[2:]: 
-        data: list[float] = line.strip().split()
+    for line in lines[1:]: 
+        data: list[str] = line.strip().split()
         if not data: 
             continue
-        elf_a, elf_b = float(data[0]), float(data[1])
+        elf_a, elf_b = int(data[0]), int(data[1])
         S.add_conflict(elf_a, elf_b)
 
     # Chamada da funçõe que resolve o problema
